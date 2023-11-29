@@ -1,15 +1,15 @@
-import { Category, Flix } from "@prisma/client";
+import { Genre, Flix } from "@prisma/client";
 
 import { FlixCard } from "@/components/flix-card";
 
-type FlixWithProgressWithCategory = Flix & {
-  category: Category | null;
+type FlixWithProgressWithGenre = Flix & {
+  genre: Genre | null;
   episodes: { id: string }[];
   // progress: number | null;
 };
 
 interface FlixsListProps {
-  items: FlixWithProgressWithCategory[];
+  items: FlixWithProgressWithGenre[];
 }
 
 export const FlixsList = ({
@@ -27,7 +27,7 @@ export const FlixsList = ({
             episodesLength={item.episodes.length}
             price={item.price!}
             // progress={item.progress}
-            category={item?.category?.name!}
+            genre={item?.genre?.name!}
           />
         ))}
       </div>

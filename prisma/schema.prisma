@@ -46,6 +46,61 @@ model LoginNonce {
   @@index([userId])
 }
 
+model Artistry {
+  id                 String  @id @default(uuid())
+  userId             String
+  title              String  @db.VarChar(255)
+  description        String? @db.Text
+  imageUrl           String? @db.Text
+  price              Float?
+  discountPercentage Float?
+
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+
+  completeData        Json? // Complete data of a flix in JSON format
+  artistryDataUrl     String? // IPFS URL containing JSON of combined episode data of a Flix
+  artistryNftId       Int? // NFT ID of the flix
+  isNFT               Boolean              @default(false) // Determine if the flix is an NFT or normal
+  artistrySaleStatus  ArtistrySaleStatus   @default(NOT_FOR_SALE) // Sale status: Not on sale, or auction, or fixed sale, or for rent
+  artistrySaleDetails ArtistrySaleDetails? // Details about the sale, like price, initial bid, current bid, start and end time
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@fulltext([title])
+}
+
+enum ArtistrySaleStatus {
+  NOT_FOR_SALE
+  AUCTION
+  SALE
+}
+
+model ArtistrySaleDetails {
+  id                 String   @id @default(uuid())
+  price              Float?
+  bottomPrice        Float?
+  currentBid         Float?
+  timeLeft           Int? // in seconds
+  endTime            Json?
+  discountPercentage Float?
+  artistryId         String   @unique
+  artistry           Artistry @relation(fields: [artistryId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([artistryId])
+}
+
+model Category {
+  id       String     @id @default(uuid())
+  name     String     @unique
+  artistry Artistry[]
+}
+
 model Flix {
   id                 String  @id @default(uuid())
   userId             String
@@ -59,8 +114,8 @@ model Flix {
   quicks Boolean @default(false)
   shorts Boolean @default(false)
 
-  categoryId String?
-  category   Category? @relation(fields: [categoryId], references: [id])
+  genreId String?
+  genre   Genre?  @relation(fields: [genreId], references: [id])
 
   episodes Episode[]
 
@@ -74,7 +129,7 @@ model Flix {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([categoryId])
+  @@index([genreId])
   @@fulltext([title])
 }
 
@@ -102,7 +157,7 @@ model SaleDetails {
   @@index([flixId])
 }
 
-model Category {
+model Genre {
   id    String @id @default(uuid())
   name  String @unique
   flixs Flix[]

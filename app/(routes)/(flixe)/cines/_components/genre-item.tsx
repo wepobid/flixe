@@ -6,31 +6,31 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
-interface CategoryItemProps {
+interface GenreItemProps {
   label: string;
   value?: string;
   icon?: IconType;
 }
 
-export const CategoryItem = ({
+export const GenreItem = ({
   label,
   value,
   icon: Icon,
-}: CategoryItemProps) => {
+}: GenreItemProps) => {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const currentCategoryId = searchParams.get("categoryId");
+  const currentGenreId = searchParams.get("genreId");
   const currentTitle = searchParams.get("title");
 
   const isSelected =
-    !currentCategoryId && value === "all" ? true : currentCategoryId === value;
+    !currentGenreId && value === "all" ? true : currentGenreId === value;
 
   const onClick = () => {
     let newQuery = {
       title: currentTitle,
-      categoryId: isSelected || value === "all" ? null : value,
+      genreId: isSelected || value === "all" ? null : value,
     };
 
     const url = qs.stringifyUrl(

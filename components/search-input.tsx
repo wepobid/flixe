@@ -16,14 +16,14 @@ export const SearchInput = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const currentCategoryId = searchParams.get("categoryId");
+  const currentGenreId = searchParams.get("genreId");
 
   useEffect(() => {
     const url = qs.stringifyUrl(
       {
         url: pathname,
         query: {
-          categoryId: currentCategoryId,
+          genreId: currentGenreId,
           title: debouncedValue,
         },
       },
@@ -31,7 +31,7 @@ export const SearchInput = () => {
     );
 
     router.push(url);
-  }, [debouncedValue, currentCategoryId, router, pathname]);
+  }, [debouncedValue, currentGenreId, router, pathname]);
 
   return (
     <div className="relative">

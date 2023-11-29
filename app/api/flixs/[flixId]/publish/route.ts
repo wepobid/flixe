@@ -42,7 +42,7 @@ export async function PATCH(
 
     const hasPublishedEpisode = flix.episodes.some((episode) => episode.isPublished);
 
-    if (!flix.title || !flix.description || !flix.imageUrl || !flix.categoryId || !hasPublishedEpisode) {
+    if (!flix.title || !flix.description || !flix.imageUrl || !flix.genreId || !hasPublishedEpisode) {
       return new NextResponse("Missing required fields", { status: 401 });
     }
 

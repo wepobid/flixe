@@ -19,7 +19,7 @@ export default function Header() {
   const [confettiOpacity, setConfettiOpacity] = useState(1);
 
   const menuItems = isStudioPage
-    ? ["/studio/flixs", "/studio/create", "/studio/adware", "/studio/analytics"]
+    ? ["/studio/flixs", "/studio/artistry", "/studio/immersive", "/studio/adware"]
     : ["/cines", "/quicks", "/buzz", "/fundz"];
 
   const isActive = (path: string) => {

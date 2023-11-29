@@ -1,6 +1,6 @@
 "use client";
 
-import { Category } from "@prisma/client";
+import { Genre } from "@prisma/client";
 import {
   FcEngineering,
   FcFilmReel,
@@ -12,13 +12,13 @@ import {
 } from "react-icons/fc";
 import { IconType } from "react-icons";
 
-import { CategoryItem } from "./category-item";
+import { GenreItem } from "./genre-item";
 
-interface CategoriesProps {
-  items: Category[];
+interface GenresProps {
+  items: Genre[];
 }
 
-const iconMap: Record<Category["name"], IconType> = {
+const iconMap: Record<Genre["name"], IconType> = {
   "All": FcMultipleDevices,
   "Music": FcMusic,
   "Photography": FcOldTimeCamera,
@@ -29,16 +29,16 @@ const iconMap: Record<Category["name"], IconType> = {
   "Engineering": FcEngineering,
 };
 
-export const Categories = ({
+export const Genres = ({
   items,
-}: CategoriesProps) => {
-  const allCategory = { id: "all", name: "All Flix" };
-  const categories = [allCategory, ...items];
+}: GenresProps) => {
+  const allGenre = { id: "all", name: "All Flix" };
+  const genres = [allGenre, ...items];
 
   return (
     <div className="flex items-center gap-x-2 overflow-x-auto">
-      {categories.map((item) => (
-        <CategoryItem
+      {genres.map((item) => (
+        <GenreItem
           key={item.id}
           label={item.name}
           icon={iconMap[item.name]}

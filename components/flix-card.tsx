@@ -14,7 +14,7 @@ interface FlixCardProps {
   episodesLength: number;
   price: number;
   // progress: number | null;
-  category: string;
+  genre: string;
 }
 
 export const FlixCard = ({
@@ -24,7 +24,7 @@ export const FlixCard = ({
   episodesLength,
   price,
   // progress,
-  category,
+  genre,
 }: FlixCardProps) => {
   return (
     <Link href={`/flixs/${id}`}>
@@ -46,7 +46,7 @@ export const FlixCard = ({
             </div>
             <div className="flex flex-row gap-2">
               <p className="text-sm text-secondary dark:text-card-foreground font-medium">
-                {category}
+                {genre}
               </p>
               <div className="flex items-center h-full">
                 {" "}

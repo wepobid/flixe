@@ -1,10 +1,10 @@
-import { Category, Flix } from "@prisma/client";
+import { Genre, Flix } from "@prisma/client";
 
 import { getProgress } from "@/actions/get-progress";
 import { db } from "@/lib/db";
 
-type FlixWithProgressWithCategory = Flix & {
-  category: Category | null;
+type FlixWithProgressWithGenre = Flix & {
+  genre: Genre | null;
   episodes: { id: string }[];
   // progress: number | null;
 };
@@ -12,14 +12,14 @@ type FlixWithProgressWithCategory = Flix & {
 type GetFlixs = {
   userId: string;
   title?: string;
-  categoryId?: string;
+  genreId?: string;
 };
 
 export const getFlixs = async ({
   userId,
   title,
-  categoryId
-}: GetFlixs): Promise<FlixWithProgressWithCategory[]> => {
+  genreId
+}: GetFlixs): Promise<FlixWithProgressWithGenre[]> => {
   try {
     const flixs = await db.flix.findMany({
       where: {
@@ -27,10 +27,10 @@ export const getFlixs = async ({
         title: {
           contains: title,
         },
-        categoryId,
+        genreId,
       },
       include: {
-        category: true,
+        genre: true,
         episodes: {
           where: {
             isPublished: true,
@@ -50,7 +50,7 @@ export const getFlixs = async ({
       }
     });
 
-    // const flixsWithProgress: FlixWithProgressWithCategory[] = await Promise.all(
+    // const flixsWithProgress: FlixWithProgressWithGenre[] = await Promise.all(
     //   flixs.map(async flix => {
     //     if (flix.purchases.length === 0) {
     //       return {

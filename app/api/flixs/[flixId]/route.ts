@@ -216,7 +216,7 @@ export async function PATCH(
         "imageUrl",
         "quicks",
         "shorts",
-        "categoryId",
+        "genreId",
         "episodes",
         "completeData",
         "flixDataUrl",

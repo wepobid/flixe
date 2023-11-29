@@ -5,7 +5,7 @@ import { SearchInput } from "@/components/search-input";
 import { getFlixs } from "@/actions/get-flixs";
 import { FlixsList } from "@/components/flixs-list";
 
-import { Categories } from "./_components/categories";
+import { Genres } from "./_components/genres";
 
 import authOptions from "@/app/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
@@ -20,7 +20,7 @@ interface Session {
 interface SearchPageProps {
   searchParams: {
     title: string;
-    categoryId: string;
+    genreId: string;
   };
 }
 
@@ -31,7 +31,7 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
     return redirect("/");
   }
 
-  const categories = await db.category.findMany({
+  const genres = await db.genre.findMany({
     orderBy: {
       name: "asc",
     },
@@ -51,7 +51,7 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
       <div className="p-4 space-y-4">
         <div className="flex flex-row gap-x-5 justify-center items-center">
           <SearchInput />
-          <Categories items={categories} />
+          <Genres items={genres} />
         </div>
         <FlixsList items={flixs} />
       </div>

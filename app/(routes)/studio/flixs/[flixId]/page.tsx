@@ -16,7 +16,7 @@ import { Banner } from "@/components/banner";
 import { TitleForm } from "./_components/title-form";
 import { DescriptionForm } from "./_components/description-form";
 import { ImageForm } from "./_components/image-form";
-import { CategoryForm } from "./_components/flix-form";
+import { GenreForm } from "./_components/flix-form";
 import { PriceForm } from "./_components/price-form";
 import { EpisodesForm } from "./_components/episodes-form";
 import { Actions } from "./_components/actions";
@@ -46,7 +46,7 @@ const FlixIdPage = async ({ params }: { params: { flixId: string } }) => {
     },
   });
 
-  const categories = await db.category.findMany({
+  const genres = await db.genre.findMany({
     orderBy: {
       name: "asc",
     },
@@ -60,7 +60,7 @@ const FlixIdPage = async ({ params }: { params: { flixId: string } }) => {
     flix.title,
     flix.description,
     flix.imageUrl,
-    flix.categoryId,
+    flix.genreId,
     flix.episodes.some((episode) => episode.isPublished),
   ];
 
@@ -105,12 +105,12 @@ const FlixIdPage = async ({ params }: { params: { flixId: string } }) => {
             </div>
             <TitleForm initialData={flix} flixId={flix.id} />
             <DescriptionForm initialData={flix} flixId={flix.id} />
-            <CategoryForm
+            <GenreForm
               initialData={flix}
               flixId={flix.id}
-              options={categories.map((category) => ({
-                label: category.name,
-                value: category.id,
+              options={genres.map((genre) => ({
+                label: genre.name,
+                value: genre.id,
               }))}
             />
             <ImageForm initialData={flix} flixId={flix.id} />

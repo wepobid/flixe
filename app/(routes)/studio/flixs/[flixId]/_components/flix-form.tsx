@@ -21,21 +21,21 @@ import { cn } from "@/lib/utils";
 import { Combobox } from "@/components/ui/combobox";
 import { useToast } from "@/components/ui/use-toast";
 
-interface CategoryFormProps {
+interface GenreFormProps {
   initialData: Flix;
   flixId: string;
   options: { label: string; value: string }[];
 }
 
 const formSchema = z.object({
-  categoryId: z.string().min(1),
+  genreId: z.string().min(1),
 });
 
-export const CategoryForm = ({
+export const GenreForm = ({
   initialData,
   flixId,
   options,
-}: CategoryFormProps) => {
+}: GenreFormProps) => {
   const { toast } = useToast();
 
   console.log(initialData);
@@ -50,7 +50,7 @@ export const CategoryForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      categoryId: initialData?.categoryId || "",
+      genreId: initialData?.genreId || "",
     },
   });
 
@@ -75,20 +75,20 @@ export const CategoryForm = ({
   };
 
   const selectedOption = options.find(
-    (option) => option.value === initialData.categoryId
+    (option) => option.value === initialData.genreId
   );
 
   return (
     <div className="mt-6 border bg-background rounded-md p-4">
       <div className="flex items-center justify-between font-semibold text-lg">
-        Flix category
+        Flix genre
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
             <>Cancel</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Edit category
+              Edit genre
             </>
           )}
         </Button>
@@ -97,10 +97,10 @@ export const CategoryForm = ({
         <p
           className={cn(
             "text-sm mt-2",
-            !initialData.categoryId && "text-slate-500 italic"
+            !initialData.genreId && "text-slate-500 italic"
           )}
         >
-          {selectedOption?.label || "No category"}
+          {selectedOption?.label || "No genre"}
         </p>
       )}
       {isEditing && (
@@ -111,7 +111,7 @@ export const CategoryForm = ({
           >
             <FormField
               control={form.control}
-              name="categoryId"
+              name="genreId"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
