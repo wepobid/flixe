@@ -172,6 +172,7 @@ export const VideoPlayer = ({
 
   useEffect(() => {
     const getAdData = async () => {
+      debugger;
       if (
         !hasFetchedAdData &&
         (isNFTOwned || !isLocked) && // !isNFTOwned &&
@@ -185,7 +186,7 @@ export const VideoPlayer = ({
           const newAdData = await adwareInteraction.displayNextVideoAd(
             flixs.userId
           );
-          debugger;
+
           if (
             newAdData &&
             typeof newAdData === "object" &&

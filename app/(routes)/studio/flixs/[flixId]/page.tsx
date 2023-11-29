@@ -93,7 +93,7 @@ const FlixIdPage = async ({ params }: { params: { flixId: string } }) => {
             <span className="text-sm text-primary">{completionText}</span>
           </div>
           <Actions
-            disabled={!isComplete}
+            disabled={!isComplete || !flix.isNFT}
             flixId={params.flixId}
             isPublished={flix.isPublished}
           />
