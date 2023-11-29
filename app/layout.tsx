@@ -1,10 +1,11 @@
 import Header from "@/components/header";
-import "./globals.css";
+import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { Exo_2 } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import NextAuthProvider from "@/components/NextAuthProvider";
+import Providers from '@/components/Providers';
 
 const exo2 = Exo_2({ subsets: ["latin"] });
 
@@ -21,6 +22,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={exo2.className}>
+            <Providers>
                 <NextAuthProvider>
                     <ThemeProvider
                         attribute="class"
@@ -32,6 +34,7 @@ export default function RootLayout({
                         <Toaster />
                     </ThemeProvider>
                 </NextAuthProvider>
+                </Providers>
             </body>
         </html>
     );

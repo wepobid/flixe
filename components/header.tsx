@@ -75,8 +75,7 @@ export default function Header() {
               onClick={(e) => {
                 if (
                   item === "/studio/analytics" ||
-                  item === "/quicks" ||
-                  item === "/buzz"
+                  item === "/quicks"
                 ) {
                   e.preventDefault();
                 }
@@ -89,8 +88,7 @@ export default function Header() {
                 )}`}
                 disabled={
                   item === "/studio/analytics" ||
-                  item === "/quicks" ||
-                  item === "/buzz"
+                  item === "/quicks"
                 }
               >
                 {item.split("/").pop()}
