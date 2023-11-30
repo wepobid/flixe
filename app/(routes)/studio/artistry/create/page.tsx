@@ -13,48 +13,28 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Editor } from "@/components/editor";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft, CalendarIcon } from "lucide-react";
+import { ArrowLeft, PlusCircle, Trash2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
-import { format } from "date-fns";
 import { uploadFiles } from "@/lib/uploadthing";
 import useCrowdFundingStore from "@/store/crowdFundingStore";
 import { addDays } from "date-fns";
 import { fetchAddress } from "@/lib/walletUtil";
 import { storeJSONToWeb3Storage } from "@/service/Web3Storage";
 import { useRouter } from "next/navigation";
-import { PriceForm } from "./components/price-form";
 import { Combobox } from "@/components/ui/combobox";
 import { db } from "@/lib/db";
+import { useToast } from "@/components/ui/use-toast";
+import FilePreview from "./components/filePreview";
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);
 const tomorrow = addDays(new Date(), 1);
 
 const formSchema = z.object({
-  price: z
-    .string()
-    .refine(
-      (value) => !isNaN(parseFloat(value)) && parseFloat(value) >= 0.0001,
-      {
-        message: "Price should be more than 0.0001",
-        path: ["price"],
-      }
-    ),
-  endDate: z.date().refine((date) => date > today, {
-    message: "End date must be a date after today.",
-  }),
-  story: z.string().min(1),
   title: z.string().min(1, {
     message: "Title is required",
   }),
@@ -78,12 +58,55 @@ const formSchema = z.object({
         message: `The image must be a maximum of 10MB.`,
       }
     ),
+  art: z
+    .custom<File>(
+      (file) => file instanceof File, // Ensures it's a File object
+      {
+        message: "File is required",
+      }
+    )
+    .refine(
+      (file) => file.size <= 10 * 1024 * 1024, // 10 MB size limit
+      {
+        message: "File must be less than 10MB",
+      }
+    ),
+  price: z
+    .string()
+    .refine(
+      (value) => !isNaN(parseFloat(value)) && parseFloat(value) >= 0.0001,
+      {
+        message: "Price should be more than 0.0001",
+        path: ["price"],
+      }
+    ),
+  endDate: z.date().refine((date) => date > today, {
+    message: "End date must be a date after today.",
+  }),
+  story: z.string().min(1),
   storyOneline: z.string().min(1),
+  properties: z
+    .array(
+      z.object({
+        name: z.string().min(1, { message: "Property name is required" }),
+        value: z.string().min(1, { message: "Property value is required" }),
+      })
+    )
+    .refine(
+      (properties) =>
+        properties.length > 0 &&
+        properties.every((prop) => prop.name && prop.value),
+      {
+        message:
+          "All properties must be filled and at least one property is required",
+      }
+    ),
   categoryId: z.string().min(1),
 });
 
 const CreateCampaign = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
   const [walletAddress, setWalletAddress] = useState(null);
   const [categorys, setcategorys] = useState<
     { label: string; value: string }[]
@@ -130,10 +153,41 @@ const CreateCampaign = () => {
       title: "",
       image: undefined,
       storyOneline: "",
+      properties: [{ name: "", value: "" }],
+      categoryId: "",
     },
   });
 
   const { isSubmitting, isValid, errors } = form.formState;
+
+  const [fileType, setFileType] = useState<
+    "Image" | "Model" | "Video" | "Music" | "Unknown"
+  >("Unknown");
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "properties",
+  });
+
+  const handleAddProperty = () => {
+    const properties = form.getValues("properties");
+    const lastProperty = properties[properties.length - 1];
+    if (lastProperty && lastProperty.name && lastProperty.value) {
+      append({ name: "", value: "" });
+    } else {
+      toast({
+        title: "Value misisng updated",
+        description: "Plz fill all the properties to addk new one.",
+      });
+      console.log("Please fill the previous property before adding a new one.");
+    }
+  };
+
+  const canAddNewProperty = () => {
+    const properties = form.getValues("properties");
+    const lastProperty = properties[properties.length - 1];
+    return lastProperty && lastProperty.name && lastProperty.value;
+  };
 
   const calculateDaysLeft = (endDate: Date | undefined) => {
     if (!endDate) return 0;
@@ -152,10 +206,25 @@ const CreateCampaign = () => {
     return daysLeft;
   };
 
+  const determineFileType = (file: any) => {
+    const fileType = file.type;
+    if (fileType.startsWith("image/")) {
+      setFileType("Image");
+    } else if (fileType === "model/gltf-binary") {
+      setFileType("Model");
+    } else if (fileType.startsWith("video/")) {
+      setFileType("Video");
+    } else if (fileType.startsWith("audio/")) {
+      setFileType("Music");
+    } else {
+      setFileType("Unknown");
+    }
+  };
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // return router.push('/fundz')
 
-    const { price, endDate, story, title, storyOneline } = values;
+    const { price, art, endDate, story, title, storyOneline } = values;
 
     const deadline = new Date(endDate).getTime();
 
@@ -201,7 +270,7 @@ const CreateCampaign = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-6 px-20">
       {/* {isLoading && <Loader />} */}
       <Link
         href={`/fundz`}
@@ -235,7 +304,7 @@ const CreateCampaign = () => {
           className="w-full mt-10 flex flex-col gap-10"
         >
           <div className="flex gap-10">
-            <div className="border rounded-md p-4 font-medium flex flex-col gap-8 w-1/2">
+            <div className="border rounded-md p-4 font-medium flex flex-col gap-8 w-2/3">
               <FormField
                 control={form.control}
                 name="title"
@@ -286,26 +355,27 @@ const CreateCampaign = () => {
                 />
                 <FormField
                   control={form.control}
-                  name="image"
+                  name="art"
                   render={({ field }) => (
                     <FormItem className="flex flex-row gap-3 items-center justify-between rounded-lg border p-4 bg-card w-1/2">
                       <div className="space-y-0.5">
-                        <FormLabel className="text-base">Cover Image</FormLabel>
+                        <FormLabel className="text-base">Upload File</FormLabel>
                         <FormDescription className="whitespace-nowrap">
-                          Select an image under 10MB
+                          (image, model, video, music)
                         </FormDescription>
                       </div>
                       <FormControl>
                         <Input
                           type="file"
-                          accept="image/*"
+                          accept="image/*,.glb,video/*,audio/*"
                           multiple={false}
-                          className="max-w-[50%] font-bold text-[#8b7ad0] text-sm"
+                          className="max-w-[50%] font-bold text-[#d0a17a] text-sm"
                           {...{ ...field, value: undefined }}
                           onChange={(e) => {
                             const file = e.target.files?.[0];
                             if (file) {
                               field.onChange(file);
+                              determineFileType(file);
                             }
                           }}
                         />
@@ -357,14 +427,114 @@ const CreateCampaign = () => {
                   </FormItem>
                 )}
               />
+              <div className="">
+                <div className="flex items-center justify-between text-xl leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium">
+                  Art properties
+                  <Button
+                    type="button"
+                    onClick={handleAddProperty}
+                    variant="ghost"
+                    disabled={!canAddNewProperty()}
+                    // className="bg-muted hover:bg-muted-foreground/20"
+                  >
+                    <PlusCircle className="h-4 w-4 mr-2" />
+                    Add New
+                  </Button>
+                  {/* <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Button
+                          type="button"
+                          onClick={handleAddProperty}
+                          variant="ghost"
+                          disabled={!canAddNewProperty()}
+                          // className="bg-muted hover:bg-muted-foreground/20"
+                        >
+                          <PlusCircle className="h-4 w-4 mr-2" />
+                          Add New
+                        </Button>
+                      </TooltipTrigger>
+                      {!canAddNewProperty() && (
+                        <TooltipContent>
+                          <p>
+                            Please fill out all properties before adding a new
+                            one.
+                          </p>
+                        </TooltipContent>
+                      )}
+                    </Tooltip>
+                  </TooltipProvider> */}
+                </div>
+                {fields.map((item, index) => (
+                  <div key={item.id} className="my-4">
+                    <div className="flex gap-4 items-center">
+                      {/* Property Name */}
+                      <FormField
+                        control={form.control}
+                        name={`properties[${index}].name` as any}
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row gap-3 items-center justify-between rounded-lg border p-4 bg-card w-1/2">
+                            <div className="space-y-0.5">
+                              <FormLabel className="text-base">
+                                Property Name
+                              </FormLabel>
+                            </div>
+                            <FormControl>
+                              <Input
+                                type="text"
+                                placeholder="E.g. Color"
+                                {...field}
+                                className="max-w-[50%]"
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+
+                      {/* Property Value */}
+                      <FormField
+                        control={form.control}
+                        name={`properties[${index}].value` as any}
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row gap-3 items-center justify-between rounded-lg border p-4 bg-card w-1/2">
+                            <div className="space-y-0.5">
+                              <FormLabel className="text-base">
+                                Property Value
+                              </FormLabel>
+                            </div>
+                            <FormControl>
+                              <Input
+                                type="text"
+                                placeholder="E.g. Red"
+                                {...field}
+                                className="max-w-[50%]"
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+
+                      {/* Remove Button */}
+                      <Button
+                        onClick={() => remove(index)}
+                        disabled={index === 0}
+                        className="bg-muted hover:bg-muted-foreground/20 items-center"
+                      >
+                        <Trash2 className="h-4 w-4 text-white/30 hover:text-red-500" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="border rounded-md p-4 font-medium flex flex-col gap-8 w-1/2 relative">
+            <div className="border rounded-md p-4 font-medium flex flex-col gap-8 w-1/3 relative">
               <div className="absolute top-[50%] -left-3 z-10 rounded-t-md tracking-widest transform translate-y-full -translate-x-1/4 text-primary px-3 rotate-90 backdrop-blur-md bg-opacity-20 bg-blue-100 border-blue-100">
                 Preview
               </div>
 
               {/* Image Preview */}
-              <div className="group hover:shadow-sm w-full rounded-3xl bg-card cursor-pointer hover:bg-card">
+              <FilePreview file={form.watch("art")} fileType={fileType} />
+              <div className="group hover:shadow-sm aspect-w-5 aspect-h-1 w-[500px] m-auto rounded-3xl bg-card cursor-pointer hover:bg-card">
                 <div className="relative">
                   {form.watch("image") ? (
                     <Image
