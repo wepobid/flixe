@@ -174,7 +174,7 @@ const VideoThumbnailGrid: React.FC<VideoThumbnailProps> = ({
                             onChange={handleImageUpload}
                         />
                     </div>
-                    <span className="text-gray-500">Upload Image</span>
+                    <span className="text-priamry-80">Upload Image</span>
                 </label>
                 {selectedImages.map((selectedImage, index) => (
                     <div
@@ -227,7 +227,7 @@ const VideoThumbnailGrid: React.FC<VideoThumbnailProps> = ({
                         />
                         {index == 0 && (
                             <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
-                                <Badge className="bg-black bg-opacity-40 backdrop-blur-sm text-white px-2 py-1 pointer-events-none">
+                                <Badge className="bg-black bg-opacity-40 backdrop-blur-sm text-priamry px-2 py-1 pointer-events-none">
                                     {episodeThumbnail
                                         ? "Current Thumbnail"
                                         : "Default Thumbnail"}

@@ -1,5 +1,5 @@
 import Web3 from "web3";
-import abi from "./abis/CrowdFundingAbi.json";
+import abi from "../abis/CrowdFundingAbi.json";
 
 const contractAddress = process.env.NEXT_PUBLIC_CROWDFUNDING_CONTRACT_ADDRESS;
 

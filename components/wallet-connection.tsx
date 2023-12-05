@@ -146,7 +146,7 @@ export function WalletConnection() {
                     <Label htmlFor="username" className="text-left">
                       Username
                       <br />
-                      <span className="text-xs text-gray-500 text-left">
+                      <span className="text-xs text-priamry-80 text-left">
                         walletaddress
                       </span>
                     </Label>

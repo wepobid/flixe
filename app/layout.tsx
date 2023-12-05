@@ -30,7 +30,7 @@ export default function RootLayout({
                         enableSystem
                     >
                         <Header />
-                        <div className='mt-[4.5rem]'>{children}</div>
+                        <div className='mt-[4.5rem] sm:max-w-[90%] min-[2300px]:max-w-[80%] m-auto'>{children}</div>
                         <Toaster />
                     </ThemeProvider>
                 </NextAuthProvider>

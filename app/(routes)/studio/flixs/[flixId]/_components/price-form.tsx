@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 
-import MarketplaceInteraction from "@/contracts/MarketplaceInteraction";
+import MarketplaceInteraction from "@/contracts/interaction/MarketplaceInteraction";
 import { DateTimePicker } from "@/components/ui/date-time-picker/date-time-picker";
 import getTimeDifferenceInSec from "@/lib/getTimeDifferenceInSec";
 
@@ -216,7 +216,7 @@ export const PriceForm = ({ initialData, flixId }: PriceFormProps) => {
           } else if (initialData.saleStatus === "AUCTION") {
             await nftMarketplace.cancelNFTAuction(initialData.flixNftId);
           } else if (initialData.saleStatus === "RENT") {
-            await nftMarketplace.cancelNFTAuction(initialData.flixNftId);
+            await nftMarketplace.unlistNFTFromRental(initialData.flixNftId);
           }
           toast({
             title: "Flix NFT removed from sale",

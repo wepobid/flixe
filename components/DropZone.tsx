@@ -89,7 +89,7 @@ const DropZone: React.FC<DropZoneProps> = ({ button, toggleEdit }) => {
                 <div className="relative mt-5 w-[18rem] h-[18rem] m-auto flex flex-1 flex-col items-center justify-center">
                     <label
                         className={clsx(
-                            "grid w-full place-items-center rounded-3xl border border-dashed border-gray-500 p-10 text-center focus:outline-none",
+                            "grid w-full place-items-center rounded-3xl border border-dashed border-priamry-80 p-10 text-center focus:outline-none",
                             { "!border-green-500": dragOver }
                         )}
                         htmlFor="dropVideo"

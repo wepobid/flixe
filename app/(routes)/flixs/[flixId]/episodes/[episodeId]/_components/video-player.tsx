@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import EpisodeVideoFormLivepeer from "@/app/(routes)/studio/flixs/[flixId]/episodes/[episodeId]/_components/episode-video-form-livepeer";
 import { Episode, VideoData } from "@prisma/client";
-import AdwareInteraction from "@/contracts/AdwareInteraction";
+import AdwareInteraction from "@/contracts/interaction/AdwareInteraction";
 import useIsNFTOwned from "@/hooks/useIsNFTOwned";
 import EpisodeOffScreen from "./episode-offscreen";
 import { fetchIPFSJson } from "@/service/Web3Storage";
@@ -172,7 +172,6 @@ export const VideoPlayer = ({
 
   useEffect(() => {
     const getAdData = async () => {
-      debugger;
       if (
         !hasFetchedAdData &&
         (isNFTOwned || !isLocked) && // !isNFTOwned &&

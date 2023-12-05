@@ -24,10 +24,10 @@ const EpisodeOffScreen: React.FC<EpisodeOffScreenProps> = ({
   };
 
   return (
-    <div className="rounded-xl overflow-hidden m-auto z-10 h-[90vh] w-auto flex items-center justify-center">
-      <div className="flex flex-col mx-auto">
+    <div className="rounded-xl overflow-hidden m-auto z-10 w-full max-h-[90vh] flex items-center justify-center">
+      <div className="flex w-full flex-col mx-auto">
         {episode?.imageUrl && (
-          <div className="relative w-screen h-[90vh] overflow-hidden p-4 shadow-sm">
+          <div className="relative w-full h-[90vh] overflow-hidden shadow-sm">
             <div className="rounded-xl overflow-hidden relative h-full">
               <Image
                 src={episode.imageUrl}

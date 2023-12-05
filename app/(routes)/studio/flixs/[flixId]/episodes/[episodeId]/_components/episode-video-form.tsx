@@ -191,6 +191,7 @@ export const EpisodeVideoForm = ({
           priority
           placeholder="blur"
           blurDataURL="data:image/jpeg;base64,...yourBase64Here..."
+          
         />
       )
     );

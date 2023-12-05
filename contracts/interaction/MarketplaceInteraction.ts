@@ -1,5 +1,5 @@
 import Web3 from "web3";
-import abi from "./abis/MarketplaceAbi.json";
+import abi from "../abis/MarketplaceAbi.json";
 
 const contractAddress = process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT_ADDRESS;
 
@@ -49,8 +49,31 @@ interface NFTMarketplaceContract {
   tokenURI: (tokenId: number) => Promise<any>;
   listNFTForRent: (tokenId: number, dailyPrice: number) => Promise<any>;
   rentNFT: (tokenId: number, duration: number) => Promise<any>;
-  purchaseFlexPass: (duration: FlexPassDuration) => Promise<any>;
+  unlistNFTFromRental: (tokenId: number) => Promise<any>;
+  hasActivePass: (user: string) => Promise<boolean>;
+  getCurrentPassType: (user: string) => Promise<string>;
+  hasSuperPass: (user: string) => Promise<boolean>;
+  hasPremiumPass: (user: string) => Promise<boolean>;
+  setPassPrices: (
+    monthlyStandard: string,
+    annualStandard: string,
+    monthlySuper: string,
+    annualSuper: string,
+    monthlyPremium: string,
+    annualPremium: string
+  ) => Promise<any>;
+  getPassPrices: () => Promise<string[]>;
+  purchasePass: (
+    duration: FlexPassDuration,
+    passType: "Standard" | "Super" | "Premium"
+  ) => Promise<any>;
+  setRentalPeriod: (
+    tokenId: number,
+    rentalStart: number,
+    rentalEnd: number
+  ) => Promise<any>;
   checkRentNFTAccess: (tokenId: number, user: string) => Promise<any>;
+  checkNFTRentStatus: (tokenId: number, user: string) => Promise<any>;
   calculateRentalPrice: (
     dailyPrice: number,
     duration: number
@@ -390,25 +413,128 @@ const MarketplaceInteraction = (): NFTMarketplaceContract => {
     }
   };
 
-  // Purchase a Flex Pass
-  const purchaseFlexPass = async (duration: string) => {
-    try {
-      const accounts = await web3.eth.getAccounts();
-      const adjustedGasPrice = await getAdjustedGasPrice(web3);
+  // Unlist an NFT from rental
+  const unlistNFTFromRental = async (tokenId: number) => {
+    const accounts = await web3.eth.getAccounts();
+    const adjustedGasPrice = await getAdjustedGasPrice(web3);
 
-      // purchaseFlexPass(FlexPassDuration.Monthly)
+    return await nftMarketplaceContract.methods
+      .unlistNFTFromRental(tokenId)
+      .send({
+        from: accounts[0],
+        gas: DEFAULT_GAS_LIMIT,
+        gasPrice: adjustedGasPrice,
+      });
+  };
 
-      return await nftMarketplaceContract.methods
-        .purchaseFlexPass(duration)
-        .send({
-          from: accounts[0],
-          gas: DEFAULT_GAS_LIMIT,
-          gasPrice: adjustedGasPrice,
-        });
-    } catch (error) {
-      console.error("Error in purchasing Flex Pass:", error);
-      throw error;
+  // Set the Pass Prices
+  const setPassPrices = async (
+    monthlyStandard: string,
+    annualStandard: string,
+    monthlySuper: string,
+    annualSuper: string,
+    monthlyPremium: string,
+    annualPremium: string
+  ) => {
+    const accounts = await web3.eth.getAccounts();
+    const adjustedGasPrice = await getAdjustedGasPrice(web3);
+
+    return await nftMarketplaceContract.methods
+      .setPassPrices(
+        web3.utils.toWei(monthlyStandard, "ether"),
+        web3.utils.toWei(annualStandard, "ether"),
+        web3.utils.toWei(monthlySuper, "ether"),
+        web3.utils.toWei(annualSuper, "ether"),
+        web3.utils.toWei(monthlyPremium, "ether"),
+        web3.utils.toWei(annualPremium, "ether")
+      )
+      .send({
+        from: accounts[0],
+        gas: DEFAULT_GAS_LIMIT,
+        gasPrice: adjustedGasPrice,
+      });
+  };
+
+  // Get the Pass Prices
+  const getPassPrices = async () => {
+    const prices = await nftMarketplaceContract.methods.getPassPrices().call();
+    return prices.map((price: any) => web3.utils.fromWei(price, "ether"));
+  };
+
+  // Set rental period for an NFT
+  const setRentalPeriod = async (
+    tokenId: number,
+    rentalStart: number,
+    rentalEnd: number
+  ) => {
+    const accounts = await web3.eth.getAccounts();
+    const adjustedGasPrice = await getAdjustedGasPrice(web3);
+
+    return await nftMarketplaceContract.methods
+      .setRentalPeriod(tokenId, rentalStart, rentalEnd)
+      .send({
+        from: accounts[0],
+        gas: DEFAULT_GAS_LIMIT,
+        gasPrice: adjustedGasPrice,
+      });
+  };
+
+  // Check if a user has an active pass
+  const hasActivePass = async (user: string) => {
+    return await nftMarketplaceContract.methods.hasActivePass(user).call();
+  };
+
+  // Get current pass type for a user
+  const getCurrentPassType = async (user: string) => {
+    return await nftMarketplaceContract.methods.getCurrentPassType(user).call();
+  };
+
+  // Check if a user has a Super Pass
+  const hasSuperPass = async (user: string) => {
+    return await nftMarketplaceContract.methods.hasSuperPass(user).call();
+  };
+
+  // Check if a user has a Premium Pass
+  const hasPremiumPass = async (user: string) => {
+    return await nftMarketplaceContract.methods.hasPremiumPass(user).call();
+  };
+
+  // purchaseStandardPass or purchaseSuperPass or purchasePremiumPass
+  const purchasePass = async (
+    duration: FlexPassDuration,
+    passType: "Standard" | "Super" | "Premium"
+  ) => {
+    const accounts = await web3.eth.getAccounts();
+    const adjustedGasPrice = await getAdjustedGasPrice(web3);
+
+    // Fetch current prices
+    const prices = await getPassPrices();
+    let priceInEther;
+
+    switch (passType) {
+      case "Standard":
+        priceInEther =
+          duration === FlexPassDuration.Annual ? prices[1] : prices[0];
+        break;
+      case "Super":
+        priceInEther =
+          duration === FlexPassDuration.Annual ? prices[3] : prices[2];
+        break;
+      case "Premium":
+        priceInEther =
+          duration === FlexPassDuration.Annual ? prices[5] : prices[4];
+        break;
+      default:
+        throw new Error("Invalid pass type");
     }
+
+    const methodName = `purchase${passType}Pass`;
+    return await nftMarketplaceContract.methods[methodName](duration).send({
+      from: accounts[0],
+      gas: DEFAULT_GAS_LIMIT,
+      gasPrice: adjustedGasPrice,
+      value: web3.utils.toWei(priceInEther, "ether"),
+    });
   };
 
   // Check if a user has access to a rented NFT or via a Flex Pass
@@ -419,6 +545,18 @@ const MarketplaceInteraction = (): NFTMarketplaceContract => {
         .call();
     } catch (error) {
       console.error("Error in checking rent NFT access:", error);
+      throw error;
+    }
+  };
+
+  // Check the rent status
+  const checkNFTRentStatus = async (tokenId: number) => {
+    try {
+      return await nftMarketplaceContract.methods
+        .checkNFTRentStatus(tokenId)
+        .call();
+    } catch (error) {
+      console.error("Error in checking NFT rent status:", error);
       throw error;
     }
   };
@@ -607,37 +745,57 @@ const MarketplaceInteraction = (): NFTMarketplaceContract => {
   };
 
   return {
-    setPlatformFee,
-    getPlatformFee,
-    mintNFT,
-    mintAndListNFT,
-    listNFTForSale,
-    relistNFT,
-    unlistNFT,
-    purchaseNFT,
-    startNFTAuction,
-    cancelNFTAuction,
-    buyNFTFromAuction,
-    getAuctionPrice,
-    withdrawFunds,
-    fetchAllNFTs,
-    fetchAllNFTsOnSale,
-    fetchNFTsOwnedByUser,
-    fetchNFTDetails,
-    fetchNFTTotalCount,
-    fetchOwnedNFTsNotOnSale,
-    fetchOwnedNFTsOnSale,
-    fetchNFTsOnAuction,
-    checkPendingWithdrawal,
-    auctions,
-    discountInterval,
-    ownerOf,
-    tokenURI,
-    listNFTForRent,
-    rentNFT,
-    purchaseFlexPass,
-    checkRentNFTAccess,
-    calculateRentalPrice,
+    // NFT Minting and Management
+    mintNFT, // Creates a new NFT with a specified token URI.
+    mintAndListNFT, // Mints a new NFT and immediately lists it for sale.
+    listNFTForSale, // Lists a specific NFT for sale by its token ID.
+    relistNFT, // Relists an NFT for sale, possibly with a new price.
+    unlistNFT, // Removes an NFT from being listed for sale.
+    fetchNFTDetails, // Provides detailed information about a specific NFT.
+    fetchNFTTotalCount, // Returns the total number of NFTs minted.
+    fetchOwnedNFTsNotOnSale, // Gets NFTs owned by a user that are not listed for sale.
+    fetchOwnedNFTsOnSale, // Retrieves NFTs owned by a user that are listed for sale.
+    ownerOf, // Determines the current owner of a specific NFT.
+    tokenURI, // Retrieves the unique URI of an NFT.
+
+    // Auction Management
+    startNFTAuction, // Initiates an auction for an NFT.
+    cancelNFTAuction, // Cancels an ongoing auction for an NFT.
+    buyNFTFromAuction, // Enables purchase of an NFT from an auction.
+    getAuctionPrice, // Retrieves the current auction price of an NFT.
+    fetchNFTsOnAuction, // Fetches all NFTs currently on auction.
+    auctions, // Retrieves details of a specific auction.
+
+    // NFT Rentals
+    listNFTForRent, // Lists an NFT for rent.
+    rentNFT, // Allows renting of an NFT for a duration.
+    unlistNFTFromRental, // Removes an NFT from rental listings.
+    setRentalPeriod, // Sets the rental period for an NFT.
+    checkRentNFTAccess, // Checks user access to a rented NFT.
+    checkNFTRentStatus, // Checks the rental status of an NFT.
+    calculateRentalPrice, // Calculates the rental price for an NFT.
+
+    // User and Marketplace Interactions
+    purchaseNFT, // Enables purchase of a listed NFT.
+    withdrawFunds, // Allows withdrawal of funds from the marketplace.
+    fetchAllNFTs, // Fetches all NFTs in the marketplace.
+    fetchAllNFTsOnSale, // Retrieves all NFTs currently on sale.
+    fetchNFTsOwnedByUser, // Gets all NFTs owned by a specific user.
+    checkPendingWithdrawal, // Checks pending withdrawals for a user.
+    discountInterval, // Gets the interval for auction price reduction.
+
+    // Pass Management
+    hasActivePass, // Checks if a user has an active pass.
+    getCurrentPassType, // Determines the user's current pass type.
+    hasSuperPass, // Checks if a user has a 'Super Pass'.
+    hasPremiumPass, // Checks if a user has a 'Premium Pass'.
+    setPassPrices, // Sets prices for different pass types.
+    getPassPrices, // Retrieves current pass prices.
+    purchasePass, // General function for purchasing a pass.
+
+    // Platform Configuration
+    setPlatformFee, // Sets the platform fee for transactions.
+    getPlatformFee, // Retrieves the current platform fee.
   };
 };
 

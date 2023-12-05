@@ -101,44 +101,6 @@
 				"type": "uint256"
 			},
 			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "user",
-				"type": "address"
-			}
-		],
-		"name": "FlexPassAccessChecked",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "holder",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "duration",
-				"type": "uint256"
-			}
-		],
-		"name": "FlexPassPurchased",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
 				"indexed": false,
 				"internalType": "address",
 				"name": "seller",
@@ -246,6 +208,44 @@
 				"type": "uint256"
 			},
 			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "PremiumPassAccessChecked",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "holder",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "duration",
+				"type": "uint256"
+			}
+		],
+		"name": "PremiumPassPurchased",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
 				"indexed": false,
 				"internalType": "uint256",
 				"name": "start",
@@ -259,6 +259,82 @@
 			}
 		],
 		"name": "RentalPeriodSet",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "StandardPassAccessChecked",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "holder",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "duration",
+				"type": "uint256"
+			}
+		],
+		"name": "StandardPassPurchased",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "SuperPassAccessChecked",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "holder",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "duration",
+				"type": "uint256"
+			}
+		],
+		"name": "SuperPassPurchased",
 		"type": "event"
 	},
 	{
@@ -288,7 +364,33 @@
 	},
 	{
 		"inputs": [],
-		"name": "annualPassPrice",
+		"name": "annualPremiumPassPrice",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "annualStandardPassPrice",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "annualSuperPassPrice",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -463,6 +565,11 @@
 						"type": "uint256"
 					},
 					{
+						"internalType": "bool",
+						"name": "isAvailableForNewRentals",
+						"type": "bool"
+					},
+					{
 						"internalType": "address[]",
 						"name": "renters",
 						"type": "address[]"
@@ -507,30 +614,6 @@
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "user",
-				"type": "address"
-			}
-		],
-		"name": "checkRentNFTAccess",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -887,6 +970,25 @@
 	{
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "getCurrentPassType",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "uint256",
 				"name": "tokenId",
 				"type": "uint256"
@@ -910,12 +1012,107 @@
 	},
 	{
 		"inputs": [],
+		"name": "getPassPrices",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "getPlatformFee",
 		"outputs": [
 			{
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "hasActivePass",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "hasPremiumPass",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "hasSuperPass",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -1026,7 +1223,33 @@
 	},
 	{
 		"inputs": [],
-		"name": "monthlyPassPrice",
+		"name": "monthlyPremiumPassPrice",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "monthlyStandardPassPrice",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "monthlySuperPassPrice",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -1072,12 +1295,12 @@
 	{
 		"inputs": [
 			{
-				"internalType": "enum Marketplace.FlexPassDuration",
-				"name": "duration",
-				"type": "uint8"
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
 			}
 		],
-		"name": "purchaseFlexPass",
+		"name": "purchaseNFT",
 		"outputs": [],
 		"stateMutability": "payable",
 		"type": "function"
@@ -1085,12 +1308,38 @@
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
+				"internalType": "enum Marketplace.FlixPassDuration",
+				"name": "duration",
+				"type": "uint8"
 			}
 		],
-		"name": "purchaseNFT",
+		"name": "purchasePremiumPass",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "enum Marketplace.FlixPassDuration",
+				"name": "duration",
+				"type": "uint8"
+			}
+		],
+		"name": "purchaseStandardPass",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "enum Marketplace.FlixPassDuration",
+				"name": "duration",
+				"type": "uint8"
+			}
+		],
+		"name": "purchaseSuperPass",
 		"outputs": [],
 		"stateMutability": "payable",
 		"type": "function"
@@ -1204,11 +1453,36 @@
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "fee",
+				"name": "monthlyStandard",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "annualStandard",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "monthlySuper",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "annualSuper",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "monthlyPremium",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "annualPremium",
 				"type": "uint256"
 			}
 		],
-		"name": "setPlatformFee",
+		"name": "setPassPrices",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -1217,21 +1491,11 @@
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "rentalStart",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "rentalEnd",
+				"name": "fee",
 				"type": "uint256"
 			}
 		],
-		"name": "setRentalPeriod",
+		"name": "setPlatformFee",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -1302,19 +1566,6 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "threeMonthPassPrice",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -1365,6 +1616,19 @@
 			}
 		],
 		"name": "unlistNFT",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "unlistNFTFromRental",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"

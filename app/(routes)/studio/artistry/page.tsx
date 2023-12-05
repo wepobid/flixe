@@ -89,8 +89,13 @@ const CreateCampaign = () => {
   useEffect(() => {
     updateWalletAddress();
   }, []);
+
   const router = useRouter();
   const { createCampaign } = useCrowdFundingStore();
+
+  const handleClick = () => {
+    router.push('/fundz');
+  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -124,7 +129,6 @@ const CreateCampaign = () => {
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // return router.push('/fundz')
 
     const { price, endDate, story, title, storyOneline } = values;
 
@@ -174,13 +178,6 @@ const CreateCampaign = () => {
   return (
     <div className="p-6">
       {/* {isLoading && <Loader />} */}
-      <Link
-        href={`/fundz`}
-        className="flex items-center text-sm hover:opacity-75 transition mb-6"
-      >
-        <ArrowLeft className="h-4 w-4 mr-2" />
-        Back to fundz list view
-      </Link>
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-y-2">
           <h1 className="text-3xl font-bold tracking-wider">
@@ -188,7 +185,15 @@ const CreateCampaign = () => {
           </h1>
           <span className="text-sm text-primary">Complete all fields</span>
         </div>
-        <div className="flex items-center gap-x-2">
+        <div className="flex items-center gap-x-8">
+          <Button
+            onClick={handleClick}
+            className="flex items-center text-sm hover:opacity-75 transition"
+            variant='ghost'
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to artistry list
+          </Button>
           <Button
             disabled={!isValid || isSubmitting}
             type="submit"
@@ -205,8 +210,8 @@ const CreateCampaign = () => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="w-full mt-10 flex flex-col gap-10"
         >
-          <div className="flex gap-10">
-            <div className="border rounded-md p-4 font-medium flex flex-col gap-8 w-1/2">
+          <div className="flex gap-10 justify-between">
+            <div className="border rounded-md p-4 font-medium flex flex-col gap-8 w-1/2 max-w-4xl">
               <FormField
                 control={form.control}
                 name="title"
@@ -256,7 +261,7 @@ const CreateCampaign = () => {
                     alt="money"
                     className="w-[40px] h-[40px] object-contain"
                 /> */}
-                <h4 className="font-epilogue font-bold text-2xl text-center text-white">
+                <h4 className="font-epilogue font-bold text-2xl text-center text-priamry">
                   You will get <span className="text-[#fcd769]">100%</span> of
                   the raised amount
                 </h4>
@@ -378,7 +383,7 @@ const CreateCampaign = () => {
                 )}
               />
             </div>
-            <div className="border rounded-md p-4 font-medium flex flex-col gap-8 w-1/2 relative">
+            <div className="border rounded-md p-4 font-medium flex flex-col gap-8 w-1/2  max-w-4xl relative">
               <div className="absolute top-[50%] -left-3 z-10 rounded-t-md tracking-widest transform translate-y-full -translate-x-1/4 text-primary px-3 rotate-90 backdrop-blur-md bg-opacity-20 bg-blue-100 border-blue-100">
                 Preview
               </div>

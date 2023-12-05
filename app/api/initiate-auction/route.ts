@@ -1,4 +1,4 @@
-import AdwareInteraction from '@/contracts/AdwareInteraction';
+import AdwareInteraction from '@/contracts/interaction/AdwareInteraction';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {

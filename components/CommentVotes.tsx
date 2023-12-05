@@ -91,7 +91,7 @@ const CommentVotes: FC<CommentVotesProps> = ({
       </Button>
 
       {/* score */}
-      <p className='text-center py-2 px-1 font-medium text-xs text-zinc-900'>
+      <p className='text-center py-2 px-1 font-medium text-xs text-primary'>
         {votesAmt}
       </p>
 

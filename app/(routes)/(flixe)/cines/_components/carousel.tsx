@@ -12,7 +12,7 @@ import { motion, useMotionValue, useSpring, type PanInfo } from "framer-motion";
 import { AlertTriangle, MoveLeft, MoveRight } from "lucide-react";
 import ClientButton from "@/components/button-redirect";
 import Image from "next/image";
-import AdwareInteraction from "@/contracts/AdwareInteraction";
+import AdwareInteraction from "@/contracts/interaction/AdwareInteraction";
 import { fetchIPFSJson } from "@/service/Web3Storage";
 import { Banner } from '@/components/banner';
 

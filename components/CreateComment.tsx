@@ -64,7 +64,7 @@ const CreateComment: FC<CreateCommentProps> = ({ postId, replyToId }) => {
           placeholder='What are your thoughts?'
         />
 
-        <div className='mt-2 flex justify-end'>
+        <div className='mt-3.5 flex justify-end'>
           <Button
             isLoading={isLoading}
             disabled={input.length === 0}

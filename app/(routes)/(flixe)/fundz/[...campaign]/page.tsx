@@ -159,7 +159,7 @@ const CampaignDetails = ({ params }: { params: { campaign: string[] } }) => {
       <div className="mt-10 flex lg:flex-row flex-col gap-5 justify-between">
         <div className="flex-[2] flex flex-col gap-5">
           {/* <div>
-            <h4 className="font-epilogue font-semibold text-[18px] text-white uppercase">
+            <h4 className="font-epilogue font-semibold text-[18px] text-priamry uppercase">
               Creator
             </h4>
 
@@ -172,7 +172,7 @@ const CampaignDetails = ({ params }: { params: { campaign: string[] } }) => {
                 />
               </div>
               <div>
-                <h4 className="font-epilogue font-semibold text-[14px] text-white break-all">
+                <h4 className="font-epilogue font-semibold text-[14px] text-priamry break-all">
                   {state.owner}
                 </h4>
                 <p className="mt-[4px] font-epilogue font-normal text-[12px] text-[#808191]">
@@ -183,7 +183,7 @@ const CampaignDetails = ({ params }: { params: { campaign: string[] } }) => {
           </div> */}
 
           <div className="flex flex-col justify-between rounded-lg border p-4 bg-card">
-            <h4 className="font-epilogue font-semibold text-[18px] text-white uppercase">
+            <h4 className="font-epilogue font-semibold text-[18px] text-priamry uppercase">
               Story
             </h4>
 
@@ -193,7 +193,7 @@ const CampaignDetails = ({ params }: { params: { campaign: string[] } }) => {
           </div>
 
           <div className="flex flex-col justify-between rounded-lg border p-4 bg-card">
-            <h4 className="font-epilogue font-semibold text-[18px] text-white uppercase">
+            <h4 className="font-epilogue font-semibold text-[18px] text-priamry uppercase">
               Donators
             </h4>
             <DonationTable donationData={donationData as DonationData} />
@@ -229,7 +229,7 @@ const CampaignDetails = ({ params }: { params: { campaign: string[] } }) => {
           </div>
 
           <div className="flex flex-col gap-4 justify-between rounded-lg border p-4 bg-card">
-            <h4 className="font-epilogue font-semibold text-[18px] text-white uppercase">
+            <h4 className="font-epilogue font-semibold text-[18px] text-priamry uppercase">
               Fuel the Flix Campaign
             </h4>
             
@@ -237,7 +237,7 @@ const CampaignDetails = ({ params }: { params: { campaign: string[] } }) => {
               <svg
                 viewBox="0 0 16 16"
                 aria-hidden="true"
-                className="mt-1 h-4 w-4 flex-none fill-emerald-500 stroke-white dark:fill-emerald-200/20 dark:stroke-emerald-200"
+                className="mt-1 h-4 w-4 flex-none fill-emerald-500 stroke-priamry dark:fill-emerald-200/20 dark:stroke-emerald-200"
               >
                 <circle cx="8" cy="8" r="8" stroke-width="0"></circle>
                 <path

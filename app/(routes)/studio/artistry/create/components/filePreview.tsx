@@ -140,7 +140,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({ file, fileType }) => {
       {renderPreview()}
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button className="absolute top-0 right-0 z-10 m-4 rounded-full bg-foreground/10 hover:bg-muted-foreground/20 p-3 backdrop-filter backdrop-blur-md text-white">
+          <Button className="absolute top-0 right-0 z-10 m-4 rounded-full bg-foreground/10 hover:bg-muted-foreground/20 p-3 backdrop-filter backdrop-blur-md text-priamry">
             <Expand className="h-4 w-4" />
           </Button>
         </AlertDialogTrigger>

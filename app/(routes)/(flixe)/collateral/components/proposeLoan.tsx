@@ -33,6 +33,7 @@ import { addDays } from "date-fns";
 import { fetchAddress } from "@/lib/walletUtil";
 import { storeJSONToWeb3Storage } from "@/service/Web3Storage";
 import { useRouter } from "next/navigation";
+import { Combobox } from "@/components/ui/combobox";
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);
@@ -51,6 +52,7 @@ const formSchema = z.object({
   endDate: z.date().refine((date) => date > today, {
     message: "End date must be a date after today.",
   }),
+  nftId: z.string().min(1),
   story: z.string().min(1),
   title: z.string().min(1, {
     message: "Title is required",
@@ -78,7 +80,7 @@ const formSchema = z.object({
   storyOneline: z.string().min(1),
 });
 
-const CreateCampaign = () => {
+const CreateLoanProposal = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [walletAddress, setWalletAddress] = useState(null);
   const updateWalletAddress = async () => {
@@ -86,16 +88,16 @@ const CreateCampaign = () => {
     setWalletAddress(address);
   };
 
+  const nftValue = [
+    { label: "Among Us", value: "bfd7197f-5420-40fb-b613-9ad7d18e7d2a" },
+    { label: "Minions", value: "8227053e-3242-4c31-a914-0ebd92e08eb6" },
+    { label: "Flixe", value: "8227053e-3242-4c31-a914-0ebd92e98eb6" },
+  ];
+
   useEffect(() => {
     updateWalletAddress();
   }, []);
-
   const router = useRouter();
-  const { createCampaign } = useCrowdFundingStore();
-
-  const handleClick = () => {
-    router.push('/fundz');
-  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -158,14 +160,14 @@ const CreateCampaign = () => {
 
         console.log("campaignURI: ", campaignURI);
 
-        const hash = await createCampaign({
-          walletAddress,
-          price,
-          deadline,
-          campaignURI,
-        });
+        // const hash = await createLoanProposal({
+        //   walletAddress,
+        //   price,
+        //   deadline,
+        //   campaignURI,
+        // });
 
-        console.log("hash", hash);
+        // console.log("hash", hash);
 
         router.push("/fundz");
       } catch (error) {
@@ -177,20 +179,13 @@ const CreateCampaign = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="pt-4">
       {/* {isLoading && <Loader />} */}
-      <Button
-      onClick={handleClick}
-      className="flex items-center text-sm hover:opacity-75 transition mb-6"
-    >
-      <ArrowLeft className="h-4 w-4 mr-2" />
-      Back to fundz list view
-    </Button>
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-y-2">
           <h1 className="text-3xl font-bold tracking-wider">
-            Start a new{" "}
-            <span className="font-black text-[#6ca987]">FundFlix Campaign</span>
+            Create a new{" "}
+            <span className="font-black text-[#6ca987]">Loan Proposal</span>
           </h1>
           <span className="text-sm text-primary">Complete all fields</span>
         </div>
@@ -218,9 +213,9 @@ const CreateCampaign = () => {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Campaign title</FormLabel>
+                    <FormLabel>Proposal title</FormLabel>
                     <FormControl>
-                      <Input placeholder="Give a title" {...field} />
+                      <Input placeholder="Proposal title" {...field} />
                     </FormControl>
                     <FormMessage>
                       {errors.title && <span>{errors.title.message}</span>}
@@ -233,7 +228,7 @@ const CreateCampaign = () => {
                 name="image"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Cover Image</FormLabel>
+                    <FormLabel>Cover image</FormLabel>
                     <FormControl>
                       <Input
                         type="file"
@@ -256,17 +251,19 @@ const CreateCampaign = () => {
                   </FormItem>
                 )}
               />
-              <div className="w-full flex justify-center items-center p-4 bg-[#6ca987] h-[50px] rounded-[10px]">
-                {/* <img
-                    src={money}
-                    alt="money"
-                    className="w-[40px] h-[40px] object-contain"
-                /> */}
-                <h4 className="font-epilogue font-bold text-2xl text-center text-priamry">
-                  You will get <span className="text-[#fcd769]">100%</span> of
-                  the raised amount
-                </h4>
-              </div>
+              <FormField
+                control={form.control}
+                name="nftId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className='font-bold text-lime-50'>Select all NFTs for Collateral</FormLabel>
+                    <FormControl>
+                      <Combobox options={nftValue} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <div className="flex gap-4">
                 <FormField
                   control={form.control}
@@ -274,9 +271,9 @@ const CreateCampaign = () => {
                   render={({ field }) => (
                     <FormItem className="flex flex-row gap-3 items-center justify-between rounded-lg border p-4 bg-card w-1/2">
                       <div className="space-y-0.5">
-                        <FormLabel className="text-base">Fund needed</FormLabel>
+                        <FormLabel className="text-base">Loan needed</FormLabel>
                         <FormDescription className="whitespace-nowrap">
-                          Set the required Fund needed
+                          Set the required Loan Amount
                         </FormDescription>
                       </div>
                       <FormControl>
@@ -314,7 +311,7 @@ const CreateCampaign = () => {
                             End time
                           </FormLabel>
                           <FormDescription className="whitespace-nowrap">
-                            Set Campaign End time
+                            Set the Loan Proposal Duration
                           </FormDescription>
                         </div>
                         <Popover>
@@ -398,12 +395,11 @@ const CreateCampaign = () => {
                   <div className="flex justify-between flex-wrap space-y-2">
                     <div className="flex flex-col items-start">
                       <h4 className="text-xl font-semibold text-[#6ca987] leading-5">
-                        0 XZO
                         <span className="text-md text-foreground truncate">
                           <span className="text-gray-400 font-medium">
-                            &nbsp; raised of &nbsp;
+                          &nbsp;Need Loan amount of &nbsp;
                           </span>
-                          {form.watch("price") ? form.watch("price") : "0"}
+                          <span className='text-[#6ca987]'>{form.watch("price") ? form.watch("price") : "0"}</span>
                           &nbsp;XZO
                         </span>
                       </h4>
@@ -424,41 +420,6 @@ const CreateCampaign = () => {
               </div>
             </div>
           </div>
-
-          <div className="border bg-background rounded-md p-4 flex flex-col gap-8">
-            <FormField
-              control={form.control}
-              name="story"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-medium">
-                    Story description
-                  </FormLabel>
-                  <FormControl>
-                    <Editor {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="storyOneline"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-medium">Story oneline</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="h-[50px]"
-                      placeholder="Give a one line of the flix"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
         </form>
 
         {Object.entries(errors).map(([key, error]) => (
@@ -471,4 +432,4 @@ const CreateCampaign = () => {
   );
 };
 
-export default CreateCampaign;
+export default CreateLoanProposal;

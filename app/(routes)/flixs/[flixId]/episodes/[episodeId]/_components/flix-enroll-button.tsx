@@ -6,7 +6,7 @@ import { RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/format";
 import { useToast } from "@/components/ui/use-toast";
-import MarketplaceInteraction from "@/contracts/MarketplaceInteraction";
+import MarketplaceInteraction from "@/contracts/interaction/MarketplaceInteraction";
 import useIsNFTOwned from "@/hooks/useIsNFTOwned";
 
 interface FlixEnrollButtonProps {

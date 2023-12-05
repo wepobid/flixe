@@ -80,6 +80,25 @@
 		"anonymous": false,
 		"inputs": [
 			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "message",
+				"type": "string"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "contentCreator",
+				"type": "address"
+			}
+		],
+		"name": "VideoAdResult",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
 				"indexed": true,
 				"internalType": "address",
 				"name": "advertiser",
@@ -232,6 +251,19 @@
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "marketplaceContract",
+		"outputs": [
+			{
+				"internalType": "contract IMarketplace",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -373,6 +405,19 @@
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_marketplaceAddress",
+				"type": "address"
+			}
+		],
+		"name": "setMarketplaceContract",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{

@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 
-import MarketplaceInteraction from "@/contracts/MarketplaceInteraction";
+import MarketplaceInteraction from "@/contracts/interaction/MarketplaceInteraction";
 import { DateTimePicker } from "@/components/ui/date-time-picker/date-time-picker";
 import getTimeDifferenceInSec from "@/lib/getTimeDifferenceInSec";
 

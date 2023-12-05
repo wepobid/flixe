@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Link2, Play, Pause } from "lucide-react";
 import { uploadFiles } from "@/lib/uploadthing";
 import { storeJSONToWeb3Storage } from "@/service/Web3Storage";
-import AdwareInteraction from "@/contracts/AdwareInteraction";
+import AdwareInteraction from "@/contracts/interaction/AdwareInteraction";
 import { Separator } from "@/components/ui/separator";
 
 const formSchema = z.object({

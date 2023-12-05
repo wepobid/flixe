@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 import { storeJSONToWeb3Storage } from "@/service/Web3Storage";
-import MarketplaceInteraction from "@/contracts/MarketplaceInteraction";
+import MarketplaceInteraction from "@/contracts/interaction/MarketplaceInteraction";
 
 interface NftFormProps {
   initialData: {

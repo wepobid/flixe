@@ -71,28 +71,28 @@ const Layout = async ({
           <ul className='flex flex-col col-span-2 space-y-6'>{children}</ul>
 
           {/* info sidebar */}
-          <div className='overflow-hidden h-fit rounded-lg border border-gray-200 order-first md:order-last'>
+          <div className='overflow-hidden h-fit rounded-lg border order-first md:order-last'>
             <div className='px-6 py-4'>
               <p className='font-semibold py-3'>About r/{subreddit.name}</p>
             </div>
-            <dl className='divide-y divide-gray-100 px-6 py-4 text-sm leading-6 bg-white'>
+            <dl className='divide-y divide-border px-6 py-4 text-sm leading-6 bg-priamry'>
               <div className='flex justify-between gap-x-4 py-3'>
-                <dt className='text-gray-500'>Created</dt>
-                <dd className='text-gray-700'>
+                <dt className='text-priamry'>Created</dt>
+                <dd className='text-primary/80'>
                   <time dateTime={subreddit.createdAt.toDateString()}>
                     {format(subreddit.createdAt, 'MMMM d, yyyy')}
                   </time>
                 </dd>
               </div>
               <div className='flex justify-between gap-x-4 py-3'>
-                <dt className='text-gray-500'>Members</dt>
+                <dt className='text-priamry-80'>Members</dt>
                 <dd className='flex items-start gap-x-2'>
-                  <div className='text-gray-900'>{memberCount}</div>
+                  <div className='text-primary'>{memberCount}</div>
                 </dd>
               </div>
               {subreddit.creatorId === session?.user?.email ? (
                 <div className='flex justify-between gap-x-4 py-3'>
-                  <dt className='text-gray-500'>You created this community</dt>
+                  <dt className='text-priamry-80'>You created this community</dt>
                 </div>
               ) : null}
 
@@ -106,7 +106,7 @@ const Layout = async ({
               <Link
                 className={buttonVariants({
                   variant: 'outline',
-                  className: 'w-full mb-6',
+                  className: 'w-full mb-6 bg-muted/50',
                 })}
                 href={`/buzz/r/${slug}/submit`}>
                 Create Post

@@ -1,5 +1,5 @@
 import create from 'zustand';
-import CrowdFundingInteraction from '@/contracts/CrowdFundingInteraction';
+import CrowdFundingInteraction from '@/contracts/interaction/CrowdFundingInteraction';
 
 // Define your store type
 interface CrowdFundingStore {

@@ -79,15 +79,15 @@ const PostComment: FC<PostCommentProps> = ({
           className='h-6 w-6'
         />
         <div className='ml-2 flex items-center gap-x-2'>
-          <p className='text-sm font-medium text-gray-900'>u/{comment.author.username}</p>
+          <p className='text-sm font-medium text-priamry'>u/{comment.author.username}</p>
 
-          <p className='max-h-40 truncate text-xs text-zinc-500'>
+          <p className='max-h-40 truncate text-xs text-primary/40'>
             {formatTimeToNow(new Date(comment.createdAt))}
           </p>
         </div>
       </div>
 
-      <p className='text-sm text-zinc-900 mt-2'>{comment.text}</p>
+      <p className='text-sm text-primary/80 mt-2'>{comment.text}</p>
 
       <div className='flex gap-2 items-center'>
         <CommentVotes
@@ -127,7 +127,7 @@ const PostComment: FC<PostCommentProps> = ({
               placeholder='What are your thoughts?'
             />
 
-            <div className='mt-2 flex justify-end gap-2'>
+            <div className='mt-3.5 flex justify-end gap-2'>
               <Button
                 tabIndex={-1}
                 variant='subtle'

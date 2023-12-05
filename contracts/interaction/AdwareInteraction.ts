@@ -1,5 +1,5 @@
 import Web3 from "web3";
-import abi from "./abis/AdwareAbi.json";
+import abi from "../abis/AdwareAbi.json";
 
 const contractAddress = process.env.NEXT_PUBLIC_ADWARE_CONTRACT_ADDRESS;
 

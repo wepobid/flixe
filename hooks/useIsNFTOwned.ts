@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import MarketplaceInteraction from "@/contracts/MarketplaceInteraction";
+import MarketplaceInteraction from "@/contracts/interaction/MarketplaceInteraction";
 import { toast } from "@/components/ui/use-toast";
 import { fetchAddress } from "@/lib/walletUtil";
 import Web3 from "web3";

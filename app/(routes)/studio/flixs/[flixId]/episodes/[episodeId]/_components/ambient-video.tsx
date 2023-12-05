@@ -68,7 +68,7 @@ const AmbientLivepeerPlayer: React.FC<AmbientLivepeerPlayerProps> = ({
       ></canvas>
       <div
         ref={playerContainerRef}
-        className="rounded-xl overflow-hidden m-auto z-10 h-[90vh] w-auto flex items-center justify-center"
+        className="rounded-xl overflow-hidden m-auto z-10 w-[100%] max-h-[90vh] flex items-center justify-center"
       >
         <Player
           title={title}

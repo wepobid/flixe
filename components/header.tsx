@@ -20,7 +20,7 @@ export default function Header() {
 
   const menuItems = isStudioPage
     ? ["/studio/flixs", "/studio/artistry", "/studio/immersive", "/studio/adware"]
-    : ["/cines", "/quicks", "/buzz", "/fundz"];
+    : ["/cines", "/collateral", "/buzz", "/fundz"];
 
   const isActive = (path: string) => {
     return pathname === path ? "text-primary" : "";
