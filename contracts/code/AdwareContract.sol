@@ -3,7 +3,6 @@
 pragma solidity ^0.8.4;
 
 interface IMarketplace {
-    function hasSuperPass(address user) external view returns (bool);
     function hasPremiumPass(address user) external view returns (bool);
 }
 
@@ -195,8 +194,8 @@ contract Adware {
             return;
         }
 
-        // Check if the content creator has a Super or Premium Pass
-        if (hasSuperOrPremiumPass(contentCreator)) {
+        // Check if the content creator has a Premium Pass
+        if (hasPremiumPass(contentCreator)) {
             emit VideoAdResult("Valuable user", contentCreator);
             return;
         }
@@ -232,11 +231,9 @@ contract Adware {
         emit VideoAdResult("Ad displayed", contentCreator);
     }
 
-    // Helper function to check if user has Super or Premium pass
-    function hasSuperOrPremiumPass(address user) internal view returns (bool) {
-        return
-            marketplaceContract.hasSuperPass(user) ||
-            marketplaceContract.hasPremiumPass(user);
+    // Helper function to check if user has Premium pass
+    function hasPremiumPass(address user) internal view returns (bool) {
+        return marketplaceContract.hasPremiumPass(user);
     }
 
     // Checks the pending withdrawals (earnings) for a given address

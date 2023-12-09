@@ -14,7 +14,10 @@ struct MarketItem {
 
 interface IMarketplace {
     // Fetches details of an NFT from the marketplace
-     function getNFTStatusPrice(uint256 tokenId) external view returns (string memory status, uint256 currentPrice);
+    function getNFTStatusPrice(uint256 tokenId)
+        external
+        view
+        returns (string memory status, uint256 currentPrice);
 }
 
 contract LoanVault {
@@ -77,8 +80,16 @@ contract LoanVault {
 
     // Retrieves the current market price of a specific NFT using its token ID.
     function getNFTPrice(uint256 tokenId) public view returns (uint256) {
-        (string memory status, uint256 price) = marketplace.getNFTStatusPrice(tokenId);
-        require(keccak256(abi.encodePacked(status)) != keccak256(abi.encodePacked("Rent")) && keccak256(abi.encodePacked(status)) != keccak256(abi.encodePacked("None")), "NFT is not eligible for collateral");
+        (string memory status, uint256 price) = marketplace.getNFTStatusPrice(
+            tokenId
+        );
+        require(
+            keccak256(abi.encodePacked(status)) !=
+                keccak256(abi.encodePacked("Rent")) &&
+                keccak256(abi.encodePacked(status)) !=
+                keccak256(abi.encodePacked("None")),
+            "NFT is not eligible for collateral"
+        );
         require(price > 0, "NFT price is zero");
         return price;
     }

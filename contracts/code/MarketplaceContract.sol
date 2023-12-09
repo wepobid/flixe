@@ -17,14 +17,13 @@ contract Marketplace is ERC721URIStorage {
     uint256 public constant discountInterval = 1800; // 30 minutes in seconds
 
     // prices for different Flix Pass durations
-    uint256 public constant monthlyStandardPassPrice = 1 ether;
-    uint256 public constant annualStandardPassPrice = 10 ether;
+    uint256 public constant monthlyStandardPassPrice = 5 ether;
+    uint256 public constant annualStandardPassPrice = 50 ether;
 
-    uint256 public constant monthlySuperPassPrice = 2 ether;
-    uint256 public constant annualSuperPassPrice = 20 ether;
+    uint256 public constant monthlyPremiumPassPrice = 10 ether;
+    uint256 public constant annualPremiumPassPrice = 100 ether;
 
-    uint256 public constant monthlyPremiumPassPrice = 3 ether;
-    uint256 public constant annualPremiumPassPrice = 30 ether;
+    uint256 public constant rentAddOnDailyPrice = 3 ether;
 
     mapping(uint256 => MarketItem) private _idToMarketItem;
     mapping(uint256 => Auction) public auctions;
@@ -34,8 +33,9 @@ contract Marketplace is ERC721URIStorage {
     mapping(uint256 => Rental) private _rentals;
 
     mapping(address => FlixPass) private _standardPasses;
-    mapping(address => FlixPass) private _superPasses;
     mapping(address => FlixPass) private _premiumPasses;
+
+    mapping(address => RentAddOn) private _rentAddOns;
 
     struct MarketItem {
         uint256 tokenId;
@@ -82,6 +82,12 @@ contract Marketplace is ERC721URIStorage {
         uint256 end;
     }
 
+    struct RentAddOn {
+        address holder;
+        uint256 validUntil;
+        uint256 dailyPrice;
+    }
+
     enum FlixPassDuration {
         Monthly,
         ThreeMonth,
@@ -103,14 +109,14 @@ contract Marketplace is ERC721URIStorage {
     event NFTrented(uint256 indexed tokenId, address renter, uint256 duration);
 
     event StandardPassPurchased(address indexed holder, uint256 duration);
-    event SuperPassPurchased(address indexed holder, uint256 duration);
     event PremiumPassPurchased(address indexed holder, uint256 duration);
+
+    event RentAddOnPurchased(address indexed holder, uint256 validUntil);
 
     event StandardPassAccessChecked(
         uint256 indexed tokenId,
         address indexed user
     );
-    event SuperPassAccessChecked(uint256 indexed tokenId, address indexed user);
     event PremiumPassAccessChecked(
         uint256 indexed tokenId,
         address indexed user
@@ -493,36 +499,6 @@ contract Marketplace is ERC721URIStorage {
         emit StandardPassPurchased(msg.sender, validUntil);
     }
 
-    // Allows a user to purchase a Super Pass
-    function purchaseSuperPass(FlixPassDuration duration) public payable {
-        require(!hasActivePass(msg.sender), "User already has an active pass");
-
-        uint256 price;
-        uint256 validUntil;
-
-        if (duration == FlixPassDuration.Monthly) {
-            price = monthlySuperPassPrice;
-            validUntil = block.timestamp + 30 days;
-        } else if (duration == FlixPassDuration.Annual) {
-            price = annualSuperPassPrice;
-            validUntil = block.timestamp + 365 days;
-        } else {
-            revert("Invalid Super Pass duration");
-        }
-
-        require(msg.value >= price, "Insufficient funds for Super Pass");
-
-        // Update Super Pass details for the user
-        FlixPass storage userPass = _superPasses[msg.sender];
-        userPass.holder = msg.sender;
-        userPass.validUntil = validUntil;
-
-        // Handle payment logic here
-        pendingWithdrawals[_marketOwner] += msg.value;
-
-        emit SuperPassPurchased(msg.sender, validUntil);
-    }
-
     // Allows a user to purchase a Premium Pass
     function purchasePremiumPass(FlixPassDuration duration) public payable {
         require(!hasActivePass(msg.sender), "User already has an active pass");
@@ -557,12 +533,70 @@ contract Marketplace is ERC721URIStorage {
     function hasActivePass(address user) public view returns (bool) {
         if (
             _standardPasses[user].validUntil > block.timestamp ||
-            _superPasses[user].validUntil > block.timestamp ||
             _premiumPasses[user].validUntil > block.timestamp
         ) {
             return true;
         }
         return false;
+    }
+
+    // Get active pass details
+    function getActivePass(address user)
+        internal
+        view
+        returns (FlixPass storage)
+    {
+        if (_premiumPasses[user].validUntil > block.timestamp) {
+            return _premiumPasses[user];
+        } else if (_standardPasses[user].validUntil > block.timestamp) {
+            return _standardPasses[user];
+        } else {
+            revert("No active pass found.");
+        }
+    }
+
+    // Allows a user to purchase a Rent Add-On
+    function purchaseRentAddOn() public payable {
+        require(hasActivePass(msg.sender), "No active pass for RentAddOn.");
+
+        uint256 totalPrice = calculateRentAddOnCost(msg.sender);
+        require(totalPrice > 0, "No remaining time on active pass.");
+        require(msg.value >= totalPrice, "Insufficient funds for RentAddOn.");
+
+        RentAddOn storage rentAddOn = _rentAddOns[msg.sender];
+        rentAddOn.holder = msg.sender;
+        rentAddOn.validUntil = getActivePass(msg.sender).validUntil;
+        rentAddOn.dailyPrice = rentAddOnDailyPrice;
+
+        emit RentAddOnPurchased(msg.sender, rentAddOn.validUntil);
+
+        pendingWithdrawals[_marketOwner] += msg.value;
+    }
+
+    // Checks the status of a user's Rent AddOn
+    function checkRentAddOnStatus(address user)
+        public
+        view
+        returns (bool isActive, uint256 validUntil)
+    {
+        RentAddOn storage rentAddOn = _rentAddOns[user];
+        isActive =
+            rentAddOn.holder == user &&
+            rentAddOn.validUntil > block.timestamp;
+        validUntil = rentAddOn.validUntil;
+        return (isActive, validUntil);
+    }
+
+    // To Calculate Cost of RentAddOn
+    function calculateRentAddOnCost(address user)
+        public
+        view
+        returns (uint256)
+    {
+        if (!hasActivePass(user)) return 0;
+        FlixPass storage activePass = getActivePass(user);
+        uint256 daysLeft = (activePass.validUntil - block.timestamp) / 1 days;
+        return daysLeft * rentAddOnDailyPrice;
     }
 
     // Returns user's current pass typr
@@ -573,8 +607,6 @@ contract Marketplace is ERC721URIStorage {
     {
         if (_premiumPasses[user].validUntil > block.timestamp) {
             return "Premium";
-        } else if (_superPasses[user].validUntil > block.timestamp) {
-            return "Super";
         } else if (_standardPasses[user].validUntil > block.timestamp) {
             return "Standard";
         } else {
@@ -582,29 +614,27 @@ contract Marketplace is ERC721URIStorage {
         }
     }
 
-    function hasSuperPass(address user) external view returns (bool) {
-        return _superPasses[user].validUntil > block.timestamp;
-    }
-
     function hasPremiumPass(address user) external view returns (bool) {
         return _premiumPasses[user].validUntil > block.timestamp;
     }
 
-    // Checks if a user has access to a rented NFT or via a Flix Pass
+    // Checks if a user has access to a rented NFT via a Rent AddOn or within the rental period
     function checkRentNFTAccess(uint256 tokenId, address user)
         public
         view
         returns (bool)
     {
         Rental storage rental = _rentals[tokenId];
-        FlixPass storage pass = _premiumPasses[user];
-        bool isFlixPassHolder = (pass.holder == user &&
-            pass.validUntil > block.timestamp);
+        RentAddOn storage rentAddOn = _rentAddOns[user];
+        bool hasActiveRentAddOn = (rentAddOn.holder == user &&
+            rentAddOn.validUntil > block.timestamp);
 
-        if (isFlixPassHolder && rental.tokenId != 0) {
-            return true; // Flix Pass holder has access to all rented NFTs
+        // Check if the user has an active Rent AddOn
+        if (hasActiveRentAddOn && rental.tokenId != 0) {
+            return true; // Rent AddOn holder has access to all rented NFTs
         }
 
+        // Check if the user is a renter within the rental period
         for (uint256 i = 0; i < rental.renters.length; i++) {
             if (rental.renters[i] == user) {
                 for (uint256 j = 0; j < rental.rentalPeriods.length; j++) {
