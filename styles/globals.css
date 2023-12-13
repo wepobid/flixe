@@ -107,3 +107,24 @@
   font-style: inherit !important;
   font-size: 16px !important; 
 }
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-gradient {
+  background: linear-gradient(-45deg, #89cff0, #a0e4e0, #c7f5c0, #e4f9a0);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient 15s ease infinite;
+}
