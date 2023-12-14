@@ -21,7 +21,7 @@ export default async function Home() {
         <div className="flex flex-col gap-4 justify-center">
           <h1 className="text-5xl md:text-6xl lg:text-9xl font-bold text-center leading-tight tracking-tighter my-4">
             Step into{" "}
-            <span className="animated-gradient text-5xl md:text-6xl lg:text-9xl font-black px-1">
+            <span className="flixe-gradient text-5xl md:text-6xl lg:text-9xl font-black px-1">
               Flixe
             </span>{" "}
             <span className="font-extrabold inline-block align-middle">

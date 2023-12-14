@@ -35,9 +35,9 @@ export const Header = ({ translate }: any) => {
       }}
       className="div max-w-5xl mx-auto text-center"
     >
-      <h1 className="text-5xl font-semibold">
+      <h1 className="text-6xl font-semibold">
         Embark on the{" "}
-        <span className="animated-gradient text-5xl font-black px-1">
+        <span className="flixe-gradient text-5xl font-black px-1">
           Flixe
         </span>{" "}
         Odyssey <br />{" "}

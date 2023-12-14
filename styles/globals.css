@@ -120,8 +120,17 @@
   }
 }
 
-.animated-gradient {
+.flixe-gradient {
   background: linear-gradient(-45deg, #89cff0, #a0e4e0, #c7f5c0, #e4f9a0);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient 15s ease infinite;
+}
+
+.metamask-gradient {
+  background: linear-gradient(-45deg, #FFD1A4, #FFAB7F, #FF8560, #FF5E40);
   background-size: 400% 400%;
   -webkit-background-clip: text;
   background-clip: text;

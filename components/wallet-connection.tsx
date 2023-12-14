@@ -215,7 +215,7 @@ export function WalletConnection({ home = false }: { home?: boolean }) {
     </>
   ) : (
     <Button variant="ghost" onClick={handleScreenInClick} disabled={isLoggingIn}>
-      <span className="animated-gradient text-2xl font-black px-1">
+      <span className="metamask-gradient text-2xl font-black px-1">
         {isLoggingIn ? <Loader2 className="w-6 h-6 text-primary animate-spin"/> : "Metamask"}
       </span>
     </Button>
