@@ -1,0 +1,16 @@
+import { ShaderGradient } from 'shadergradient'
+import confetti from 'canvas-confetti'
+import { useEffect } from 'react'
+
+export default function Home(props) {
+  useEffect(() => {
+    confetti()
+  }, [])
+  return <></>
+}
+
+Home.canvas = (props) => <ShaderGradient cDistance={24} color1='#ff5005' color2='#dbba95' color3='#d0bce1' />
+
+export function metadata() {
+  return { title: 'Index' }
+}

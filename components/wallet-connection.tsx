@@ -23,7 +23,7 @@ import { useSession } from "next-auth/react";
 import { useSignOut } from "@/hooks/signOut";
 import { useWallet } from "@/hooks/connectWalletHook";
 import minifyText from "@/lib/minify";
-import { CreditCard, LogOut, User } from "lucide-react";
+import { CreditCard, Loader2, LogOut, User } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,7 +35,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function WalletConnection() {
+export function WalletConnection({ home = false }: { home?: boolean }) {
   useWallet();
 
   const { status } = useSession();
@@ -98,7 +98,7 @@ export function WalletConnection() {
   const handleScreenOutClick = () => {
     handleSignOut();
   };
-  return (
+  return !home ? (
     <>
       {status !== "authenticated" ? (
         <>
@@ -108,7 +108,7 @@ export function WalletConnection() {
             disabled={isLoggingIn}
           >
             <WalletIcon className="mr-2 h-5 w-5" />
-            {isLoggingIn ? "Connecting..." : "Screen In"}
+            {isLoggingIn ? <Loader2 className="w-6 h-6 text-primary animate-spin"/> : "Screen In"}
             <span className="sr-only">Wallet Connection</span>
           </Button>
           {walletAddress && (
@@ -213,6 +213,12 @@ export function WalletConnection() {
         </DropdownMenu>
       )}
     </>
+  ) : (
+    <Button variant="ghost" onClick={handleScreenInClick} disabled={isLoggingIn}>
+      <span className="animated-gradient text-2xl font-black px-1">
+        {isLoggingIn ? <Loader2 className="w-6 h-6 text-primary animate-spin"/> : "Metamask"}
+      </span>
+    </Button>
   );
 }
 

@@ -3,6 +3,7 @@
 import { useScroll, useTransform, motion } from "framer-motion";
 
 import { users } from "./users";
+import Image from "next/image";
 
 export const ScrollCore = () => {
   const { scrollYProgress } = useScroll();
@@ -12,7 +13,7 @@ export const ScrollCore = () => {
   const translate = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
   return (
-    <div className="transform scale-[0.8] flex items-center justify-center relative ">
+    <div className="transform scale-[0.8] flex items-center justify-center relative mt-8">
       <div
         className="w-full relative"
         style={{
@@ -79,9 +80,13 @@ export const Card = ({
             <div className="absolute top-2 right-2 rounded-full text-xs font-bold bg-white px-2 py-1">
               {user.badge}
             </div>
-            <img
+            <Image
               src={user.image}
-              className="rounded-tr-md rounded-tl-md text-sm "
+              alt="test"
+              className="object-cover"
+              width={150}
+              height={50}
+              layout="responsive"
             />
             <div className="p-4">
               <h1 className="font-semibold text-sm ">{user.name}</h1>
