@@ -33,15 +33,15 @@ export const Header = ({ translate }: any) => {
       style={{
         translateY: translate,
       }}
-      className="div max-w-5xl mx-auto text-center"
+      className="div max-w-6xl mx-auto text-center"
     >
       <h1 className="text-6xl font-semibold">
         Embark on the{" "}
-        <span className="flixe-gradient text-5xl font-black px-1">
+        <span className="flixe-gradient text-7xl font-black px-1">
           Flixe
         </span>{" "}
         Odyssey <br />{" "}
-        <span className="text-6xl lg:text-6xl  font-bold mt-1 leading-none">
+        <span className="text-6xl font-bold mt-1 leading-none">
           Revolutionizing the Digital Expression
         </span>
       </h1>
