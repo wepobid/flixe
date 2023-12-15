@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { toast } from '@/hooks/use-toast'
+import { useToast } from "@/components/ui/use-toast";
 import { cn } from '@/lib/utils'
 import { UsernameValidator } from '@/lib/validators/username'
 import { useMutation } from '@tanstack/react-query'
@@ -32,6 +32,8 @@ type FormData = z.infer<typeof UsernameValidator>
 
 export function UserNameForm({ user, className, ...props }: UserNameFormProps) {
   const router = useRouter()
+  const { toast } = useToast();
+
   const {
     handleSubmit,
     register,

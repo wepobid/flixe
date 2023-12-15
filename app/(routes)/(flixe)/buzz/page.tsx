@@ -45,7 +45,7 @@ export default async function Home() {
               className={buttonVariants({
                 className: 'w-full mt-4 mb-6',
               })}
-              href={`/buzz/r/create`}>
+              href={`/buzz/f/create`}>
               Create Community
             </Link>
           </dl>

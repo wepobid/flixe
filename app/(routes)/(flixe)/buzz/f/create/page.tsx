@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { toast } from '@/hooks/use-toast'
+import { useToast } from "@/components/ui/use-toast";
 import { useCustomToasts } from '@/hooks/use-custom-toasts'
 import { CreateSubredditPayload } from '@/lib/validators/subreddit'
 import { useMutation } from '@tanstack/react-query'
@@ -14,7 +14,8 @@ const Page = () => {
   const router = useRouter()
   const [input, setInput] = useState<string>('')
   const { loginToast } = useCustomToasts()
-
+  const { toast } = useToast();
+  
   const { mutate: createCommunity, isLoading } = useMutation({
     mutationFn: async () => {
       const payload: CreateSubredditPayload = {
@@ -54,7 +55,7 @@ const Page = () => {
       })
     },
     onSuccess: (data) => {
-      router.push(`/buzz/r/${data}`)
+      router.push(`/buzz/f/${data}`)
     },
   })
 
@@ -74,7 +75,7 @@ const Page = () => {
           </p>
           <div className='relative'>
             <p className='absolute text-sm left-0 w-8 inset-y-0 grid place-items-center text-zinc-400'>
-              r/
+              f/
             </p>
             <Input
               value={input}

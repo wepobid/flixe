@@ -1,8 +1,10 @@
 import { buttonVariants } from '@/components/ui/button'
-import { toast } from '@/hooks/use-toast'
+import { useToast } from "@/components/ui/use-toast";
 import Link from 'next/link'
 
 export const useCustomToasts = () => {
+  const { toast } = useToast();
+
   const loginToast = () => {
     const { dismiss } = toast({
       title: 'Login required.',

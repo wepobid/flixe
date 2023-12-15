@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { toast } from '@/hooks/use-toast'
+import { useToast } from "@/components/ui/use-toast";
 import { useCustomToasts } from '@/hooks/use-custom-toasts'
 import { cn } from '@/lib/utils'
 import { CommentVoteRequest } from '@/lib/validators/vote'
@@ -25,6 +25,8 @@ const CommentVotes: FC<CommentVotesProps> = ({
   currentVote: _currentVote,
 }) => {
   const { loginToast } = useCustomToasts()
+  const { toast } = useToast();
+
   const [votesAmt, setVotesAmt] = useState<number>(_votesAmt)
   const [currentVote, setCurrentVote] = useState<PartialVote | undefined>(
     _currentVote

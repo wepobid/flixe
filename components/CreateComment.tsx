@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { toast } from '@/hooks/use-toast'
+import { useToast } from "@/components/ui/use-toast";
 import { CommentRequest } from '@/lib/validators/comment'
 
 import { useCustomToasts } from '@/hooks/use-custom-toasts'
@@ -21,6 +21,7 @@ const CreateComment: FC<CreateCommentProps> = ({ postId, replyToId }) => {
   const [input, setInput] = useState<string>('')
   const router = useRouter()
   const { loginToast } = useCustomToasts()
+  const { toast } = useToast();
 
   const { mutate: comment, isLoading } = useMutation({
     mutationFn: async ({ postId, text, replyToId }: CommentRequest) => {

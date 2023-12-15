@@ -7,8 +7,8 @@ import { buttonVariants } from './ui/button'
 const ToFeedButton = () => {
   const pathname = usePathname()
 
-  // if path is /r/mycom, turn into /
-  // if path is /r/mycom/post/cligad6jf0003uhest4qqkeco, turn into /r/mycom
+  // if path is /f/mycom, turn into /
+  // if path is /f/mycom/post/cligad6jf0003uhest4qqkeco, turn into /f/mycom
 
   const subredditPath = getSubredditPath(pathname)
 
