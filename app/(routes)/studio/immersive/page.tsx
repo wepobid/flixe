@@ -3,7 +3,7 @@ export default function Home() {
         <main className="flex min-h-screen flex-col items-center justify-between p-24">
             <div>
                 <h1 className="text-6xl font-bold text-center">
-                    Flix Analytics
+                    Flix Immersive NFT
                 </h1>
             </div>
         </main>

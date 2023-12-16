@@ -24,10 +24,9 @@ import { fetchAddress } from "@/lib/walletUtil";
 import { storeJSONToWeb3Storage } from "@/service/Web3Storage";
 import { useRouter } from "next/navigation";
 import { Combobox } from "@/components/ui/combobox";
-import { db } from "@/lib/db";
 import { useToast } from "@/components/ui/use-toast";
 import FilePreview from "./filePreview";
-import MarketplaceInteraction from '@/contracts/interaction/MarketplaceInteraction';
+import MarketplaceInteraction from "@/contracts/interaction/MarketplaceInteraction";
 
 type Category = {
   id: string;
@@ -37,7 +36,6 @@ type Category = {
 type CreateArtistryProps = {
   categories: Category[];
 };
-
 
 const formSchema = z.object({
   title: z.string().min(1, {
@@ -97,7 +95,7 @@ const formSchema = z.object({
     ),
 });
 
-const CreateArtistry = ({categories}: CreateArtistryProps) => {
+const CreateArtistry = ({ categories }: CreateArtistryProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const [walletAddress, setWalletAddress] = useState(null);
@@ -112,10 +110,10 @@ const CreateArtistry = ({categories}: CreateArtistryProps) => {
 
   const router = useRouter();
 
-  const categorieOptions = categories.map(category => ({
+  const categorieOptions = categories.map((category) => ({
     label: category.name,
-    value: category.id
-  }));  
+    value: category.id,
+  }));
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -223,31 +221,33 @@ const CreateArtistry = ({categories}: CreateArtistryProps) => {
   };
 
   return (
-    <div className="p-6 px-20">
+    <div className="p-4">
       {/* {isLoading && <Loader />} */}
-      <Link
-        href={`/studio/artistry`}
-        className="flex items-center text-sm hover:opacity-75 transition mb-6"
-      >
-        <ArrowLeft className="h-4 w-4 mr-2" />
-        Back to artistry list view
-      </Link>
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col gap-y-2">
-          <h1 className="text-3xl font-bold tracking-wider">
-            Create a new <span className="font-black text-[#8b7ad0]">ART</span>
-          </h1>
-          <span className="text-sm text-primary">Complete all fields</span>
-        </div>
-        <div className="flex items-center gap-x-2">
-          <Button
-            disabled={!isValid || isSubmitting}
-            type="submit"
-            form="hook-form"
+
+      <div className="flex items-center justify-between bg-card border rounded-md px-4 py-2">
+        <div className="flex items-center flex-row justify-center align-middle">
+          <Link
+            href={`/studio/artistry`}
+            className="text-sm hover:opacity-75 transition -ml-4 -my-2 mr-4 rounded-l-md bg-background/30 hover:bg-background/70"
           >
-            Create
-          </Button>
+            <ArrowLeft className="h-4 w-4 mx-4 my-4" />
+          </Link>
+          <div className="font-medium flex flex-col gap-4">
+            <h1 className="text-3xl font-bold tracking-wider">
+              Create a new{" "}
+              <span className="font-black text-[#8b7ad0]">ART</span>
+            </h1>
+          </div>
         </div>
+        <Button
+          disabled={!isValid || isSubmitting}
+          type="submit"
+          variant="outline"
+          size="sm"
+          form="hook-form"
+        >
+          Create
+        </Button>
       </div>
 
       <Form {...form}>
@@ -257,26 +257,86 @@ const CreateArtistry = ({categories}: CreateArtistryProps) => {
           className="w-full mt-10 flex flex-col gap-10"
         >
           <div className="flex gap-10">
-            <div className="border rounded-md p-4 font-medium flex flex-col gap-8 w-2/3">
+            <div className="font-medium flex flex-col gap-8 w-2/3">
+              <div className="flex gap-4 w-full">
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem className="w-1/2">
+                      <FormLabel>Display name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Give a name for your art"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage>
+                        {errors.title && <span>{errors.title.message}</span>}
+                      </FormMessage>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="categoryId"
+                  render={({ field }) => (
+                    <FormItem className="w-1/2">
+                      <FormLabel>Art Category</FormLabel>
+                      <FormControl>
+                        <Combobox options={categorieOptions} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
               <FormField
                 control={form.control}
-                name="title"
+                name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Display name</FormLabel>
+                    <FormLabel className="font-medium">Description</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Give a name for your art"
-                        {...field}
-                      />
+                      <Editor {...field} />
                     </FormControl>
-                    <FormMessage>
-                      {errors.title && <span>{errors.title.message}</span>}
-                    </FormMessage>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
-              <div className="flex gap-4">
+
+<div className="flex gap-4">
+                <FormField
+                  control={form.control}
+                  name="art"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row gap-3 items-center justify-between rounded-lg border p-4 bg-card w-1/2">
+                      <div className="space-y-0.5">
+                        <FormLabel className="text-base">Upload Art</FormLabel>
+                        <FormDescription className="whitespace-nowrap">
+                          (image, model, video, music)
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <Input
+                          type="file"
+                          accept="image/*,.glb,video/*,audio/*"
+                          multiple={false}
+                          className="max-w-[50%] font-bold text-[#d0a17a] text-sm"
+                          {...{ ...field, value: undefined }}
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              field.onChange(file);
+                              determineFileType(file);
+                            }
+                          }}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="image"
@@ -306,63 +366,8 @@ const CreateArtistry = ({categories}: CreateArtistryProps) => {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="art"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row gap-3 items-center justify-between rounded-lg border p-4 bg-card w-1/2">
-                      <div className="space-y-0.5">
-                        <FormLabel className="text-base">Upload File</FormLabel>
-                        <FormDescription className="whitespace-nowrap">
-                          (image, model, video, music)
-                        </FormDescription>
-                      </div>
-                      <FormControl>
-                        <Input
-                          type="file"
-                          accept="image/*,.glb,video/*,audio/*"
-                          multiple={false}
-                          className="max-w-[50%] font-bold text-[#d0a17a] text-sm"
-                          {...{ ...field, value: undefined }}
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                              field.onChange(file);
-                              determineFileType(file);
-                            }
-                          }}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
               </div>
-              <FormField
-                control={form.control}
-                name="categoryId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Art Category</FormLabel>
-                    <FormControl>
-                      <Combobox options={categorieOptions} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="font-medium">Description</FormLabel>
-                    <FormControl>
-                      <Editor {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
               <FormField
                 control={form.control}
                 name="url"
@@ -480,23 +485,18 @@ const CreateArtistry = ({categories}: CreateArtistryProps) => {
                 ))}
               </div>
             </div>
-            <div className="border-l p-4 font-medium flex flex-col gap-8 w-1/3 relative">
-              <div className="absolute top-[50%] -left-3 z-10 rounded-t-md tracking-widest transform translate-y-full -translate-x-1/4 text-primary px-3 rotate-90 backdrop-blur-md bg-opacity-20 bg-blue-100 border-blue-100">
-                Preview
-              </div>
-
+            <div className="font-medium flex flex-col justify-end gap-8 w-1/3 relative">
               {/* Image Preview */}
               <FilePreview file={form.watch("art")} fileType={fileType} />
-              <div className="relative group hover:shadow-sm w-[500px] h-[350px] mx-auto rounded-3xl bg-card cursor-pointer hover:bg-card">
+              <div className="relative group hover:shadow-sm w-[500px] h-[350px] mx-auto rounded-lg bg-card cursor-pointer hover:bg-card">
                 <div className="relative h-full">
                   {form.watch("image") ? (
                     <Image
                       src={URL.createObjectURL(form.watch("image"))}
                       alt={`Selected thumbnail`}
-                      className={`w-full h-full object-cover rounded-3xl `}
-                      width={150}
-                      height={50}
-                      layout="responsive"
+                      className={`rounded-lg `}
+                      layout="fill"
+                      objectFit="cover"
                     />
                   ) : (
                     <div className="w-full h-full object-cover rounded-3xl flex justify-center items-center bg-gray-200 dark:bg-[#202020]">

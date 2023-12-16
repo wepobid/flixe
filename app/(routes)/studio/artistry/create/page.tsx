@@ -3,34 +3,30 @@ import { db } from "@/lib/db";
 
 import authOptions from "@/app/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
-import CreateArtistry from './components/createArtistry';
+import CreateArtistry from "./components/createArtistry";
 
 interface Session {
-    user?: {
-        email: string;
-    };
+  user?: {
+    email: string;
+  };
 }
 
 const CoursesPage = async () => {
-    const session: Session | null = await getServerSession(authOptions);
-    
-    if (!session?.user?.email) {
-        return redirect("/");
-    }
+  const session: Session | null = await getServerSession(authOptions);
 
-    const categories = await db.category.findMany({
-        orderBy: {
-          name: "asc",
-        },
-      });
+  if (!session?.user?.email) {
+    return redirect("/");
+  }
 
-      console.log(categories);
+  const categories = await db.category.findMany({
+    orderBy: {
+      name: "asc",
+    },
+  });
 
-    return (
-        <div className="p-6">
-            <CreateArtistry categories={categories}/>
-        </div>
-    );
+  console.log(categories);
+
+  return <CreateArtistry categories={categories} />;
 };
 
 export default CoursesPage;

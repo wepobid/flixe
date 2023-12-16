@@ -64,91 +64,88 @@ const EpisodeIdPage = async ({
   const isComplete = requiredFields.every(Boolean);
 
   return (
-    <>
+    <div className="p-4 flex flex-col gap-6">
       {!episode.isPublished && (
         <Banner
-          variant="warning"
+          variant="warning-bottom"
           label="This episode is unpublished. It will not be visible in the flix"
         />
       )}
-      <div className="p-6">
-        <div className="flex items-center justify-between">
-          <div className="w-full">
-            <Link
-              href={`/studio/flixs/${params.flixId}`}
-              className="flex items-center text-sm hover:opacity-75 transition mb-6"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to flix setup
-            </Link>
-            <div className="flex items-center justify-between w-full">
-              <div className="flex flex-col gap-y-2">
-                <h1 className="text-3xl font-bold tracking-wider">Episode Creation</h1>
-                <span className="text-sm text-primary">
-                  Complete all fields {completionText}
-                </span>
-              </div>
-              <EpisodeActions
-                disabled={!isComplete}
-                flixId={params.flixId}
-                episodeId={params.episodeId}
-                isPublished={episode.isPublished}
-              />
-            </div>
+
+      <div className="flex items-center justify-between bg-card border rounded-md px-4 py-2">
+        <div className="flex items-center flex-row justify-center align-middle">
+          <Link
+            href={`/studio/flixs/${params.flixId}`}
+            className="text-sm hover:opacity-75 transition -ml-4 -my-2 mr-4 rounded-l-md bg-background/30 hover:bg-background/70"
+          >
+            <ArrowLeft className="h-4 w-4 mx-4 my-4" />
+          </Link>
+          <div className="font-medium flex flex-col gap-4">
+            <h1 className="text-3xl font-bold tracking-wider">
+              Episode Creation
+              {/* <span className="font-black text-[#8b7ad0]">{flix.title}</span> */}
+            </h1>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
-          <div className="space-y-4">
-            <div>
-              <div className="flex items-center gap-x-2 font-bold">
-                <h2 className="text-xl">Customize your episode</h2>
-              </div>
-              <EpisodeTitleForm
-                initialData={episode}
-                flixId={params.flixId}
-                episodeId={params.episodeId}
-              />
-              <EpisodeDescriptionForm
-                initialData={episode}
-                flixId={params.flixId}
-                episodeId={params.episodeId}
-              />
-              <EpisodeShortDescriptionForm
-                initialData={episode}
-                flixId={params.flixId}
-                episodeId={params.episodeId}
-              />
+        <EpisodeActions
+          disabled={!isComplete}
+          flixId={params.flixId}
+          episodeId={params.episodeId}
+          isPublished={episode.isPublished}
+          completionText={completionText}
+        />
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-border/90 rounded-md">
+        <div className="space-y-4">
+          <div>
+            <div className="flex items-center gap-x-2 font-bold">
+              <h2 className="text-xl">Customize your episode</h2>
             </div>
-            <div>
-              <div className="flex items-center gap-x-2 font-bold">
-                <h2 className="text-xl">Access Settings</h2>
-              </div>
-              <EpisodeAccessForm
-                initialData={episode}
-                flixId={params.flixId}
-                episodeId={params.episodeId}
-              />
-              <EpisodeImageForm
-                initialData={episode}
-                flixId={params.flixId}
-                episodeId={params.episodeId}
-              />
-            </div>
+            <EpisodeTitleForm
+              initialData={episode}
+              flixId={params.flixId}
+              episodeId={params.episodeId}
+            />
+            <EpisodeDescriptionForm
+              initialData={episode}
+              flixId={params.flixId}
+              episodeId={params.episodeId}
+            />
+            <EpisodeShortDescriptionForm
+              initialData={episode}
+              flixId={params.flixId}
+              episodeId={params.episodeId}
+            />
           </div>
           <div>
             <div className="flex items-center gap-x-2 font-bold">
-              <h2 className="text-xl">Add a video</h2>
+              <h2 className="text-xl">Access Settings</h2>
             </div>
-            <EpisodeVideoFormLivepeer
+            <EpisodeAccessForm
               initialData={episode}
-              episodeId={params.episodeId}
               flixId={params.flixId}
-              edit={true}
+              episodeId={params.episodeId}
+            />
+            <EpisodeImageForm
+              initialData={episode}
+              flixId={params.flixId}
+              episodeId={params.episodeId}
             />
           </div>
         </div>
+        <div>
+          <div className="flex items-center gap-x-2 font-bold">
+            <h2 className="text-xl">Add a video</h2>
+          </div>
+          <EpisodeVideoFormLivepeer
+            initialData={episode}
+            episodeId={params.episodeId}
+            flixId={params.flixId}
+            edit={true}
+          />
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

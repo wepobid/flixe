@@ -21,6 +21,10 @@ import { PriceForm } from "./_components/price-form";
 import { EpisodesForm } from "./_components/episodes-form";
 import { Actions } from "./_components/actions";
 import { NftForm } from "./_components/nft-form";
+import { ArrowLeft } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const FlixIdPage = async ({ params }: { params: { flixId: string } }) => {
   const session: Session | null = await getServerSession(authOptions);
@@ -65,23 +69,34 @@ const FlixIdPage = async ({ params }: { params: { flixId: string } }) => {
   const totalFields = requiredFields.length;
   const completedFields = requiredFields.filter(Boolean).length;
 
-  const completionText = `(${completedFields} / ${totalFields})`;
+  const completionText = `(${completedFields}/${totalFields})`;
 
   const isComplete = requiredFields.every(Boolean);
 
   return (
-    <>
-      {!flix.isPublished && (
-        <Banner label="This flix is unpublished and not yet ready for public eyes!" />
-      )}
       <div className="p-4 flex flex-col gap-6">
-        <div className="flex items-center justify-between border rounded-md p-4">
-          <div className="font-medium flex flex-col gap-4">
-            <h1 className="text-3xl font-bold tracking-wider">
-              Setup{" "}
-              <span className="font-black text-[#8b7ad0]">{flix.title}</span>
-            </h1>
-            
+        {!flix.isPublished && (
+          <Banner
+            variant="warning-bottom"
+            label="This flix is unpublished and not yet ready for public eyes!"
+          />
+        )}
+
+        <div className="flex items-center justify-between bg-card border rounded-md px-4 py-2">
+          <div className="flex items-center flex-row justify-center align-middle">
+            <Link
+              href={`/studio/flixs`}
+              className="text-sm hover:opacity-75 transition -ml-4 -my-2 mr-4 rounded-l-md bg-background/30 hover:bg-background/70"
+            >
+              <ArrowLeft className="h-4 w-4 mx-4 my-4" />
+            </Link>
+            <Separator orientation="vertical" />
+            <div className="font-medium flex flex-col gap-4">
+              <h1 className="text-3xl font-bold tracking-wider">
+                Setup{" "}
+                <span className="font-black text-[#8b7ad0]">{flix.title}</span>
+              </h1>
+            </div>
           </div>
           <Actions
             disabled={!isComplete || !flix.isNFT}
@@ -90,7 +105,8 @@ const FlixIdPage = async ({ params }: { params: { flixId: string } }) => {
             completionText={completionText}
           />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-border/90 rounded-md">
           <div>
             <div className="flex items-center gap-x-2">
               <h2 className="text-xl font-bold">Flix Details</h2>
@@ -128,7 +144,6 @@ const FlixIdPage = async ({ params }: { params: { flixId: string } }) => {
           </div>
         </div>
       </div>
-    </>
   );
 };
 
