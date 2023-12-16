@@ -31,6 +31,7 @@ export default function RootLayout({
                     >
                         <Header />
                         <div className='mt-[4.5rem] sm:max-w-[90%] min-[2300px]:max-w-[80%] m-auto'>{children}</div>
+                        <div className="absolute inset-0 bg-dot-neutral-800 pointer-events-none select-none z-[-1]"></div>
                         <Toaster />
                     </ThemeProvider>
                 </NextAuthProvider>

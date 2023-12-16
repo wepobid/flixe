@@ -424,7 +424,7 @@ const CreateArtistry = ({ categories }: CreateArtistryProps) => {
                   </TooltipProvider> */}
                 </div>
                 {fields.map((item, index) => (
-                  <div key={item.id} className="my-4">
+                  <div key={item.id} className="my-4 border p-2 rounded-md">
                     <div className="flex gap-4 items-center">
                       {/* Property Name */}
                       <FormField
@@ -476,9 +476,10 @@ const CreateArtistry = ({ categories }: CreateArtistryProps) => {
                       <Button
                         onClick={() => remove(index)}
                         disabled={index === 0}
-                        className="bg-muted hover:bg-muted-foreground/20 items-center"
+                        variant='ghost'
+                        className="hover:bg-muted-foreground/20 items-center text-white/30 hover:text-red-500"
                       >
-                        <Trash2 className="h-4 w-4 text-white/30 hover:text-red-500" />
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
@@ -499,13 +500,13 @@ const CreateArtistry = ({ categories }: CreateArtistryProps) => {
                       objectFit="cover"
                     />
                   ) : (
-                    <div className="w-full h-full object-cover rounded-3xl flex justify-center items-center bg-gray-200 dark:bg-[#202020]">
+                    <div className="w-full h-full object-cover rounded-lg flex justify-center items-center bg-gray-200 dark:bg-[#202020]">
                       <span className="text-3xl font-black text-card tracking-widest">
                         select a cover image
                       </span>
                     </div>
                   )}
-                  <div className="absolute rounded-b-3xl inset-0 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end">
+                  <div className="absolute rounded-b-text-white/30lg inset-0 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end">
                     <p className="text-muted dark:text-muted-foreground mb-2 text-xl p-5">
                       {form.watch("title")
                         ? form.watch("title")
