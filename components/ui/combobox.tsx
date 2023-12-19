@@ -22,12 +22,14 @@ interface ComboboxProps {
   options: { label: string; value: string }[];
   value?: string;
   onChange: (value: string) => void;
+  className?: string;
 };
 
 export const Combobox = ({
   options,
   value,
-  onChange
+  onChange,
+  className
 }: ComboboxProps) => {
   const [open, setOpen] = React.useState(false)
 
@@ -38,7 +40,7 @@ export const Combobox = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between"
+          className={cn("w-full justify-between h-[50px]",  className )}
         >
           {value
             ? options.find((option) => option.value === value)?.label

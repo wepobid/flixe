@@ -17,6 +17,13 @@ export const ourFileRouter = {
   imageUploader: f({ image: { maxFileSize: '32MB' } })
   // .middleware(() => handleAuth())
   .onUploadComplete(async ({ metadata, file }) => {}),
+  glbModelUploader: f({
+    custom: {
+      accept: ['.glb'],
+      maxFileSize: '100MB'
+    }
+  })
+  .onUploadComplete(() => {}),
   flixImage: f({ image: { maxFileSize: "32MB", maxFileCount: 1 } })
     // .middleware(() => handleAuth())
     .onUploadComplete(() => {}),

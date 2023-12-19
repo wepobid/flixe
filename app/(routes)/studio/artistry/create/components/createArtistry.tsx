@@ -161,9 +161,10 @@ const CreateArtistry = ({ categories }: CreateArtistryProps) => {
 
   const determineFileType = (file: any) => {
     const fileType = file.type;
+    const model = file.name.split(".").pop().toLowerCase();
     if (fileType.startsWith("image/")) {
       setFileType("Image");
-    } else if (fileType === "model/gltf-binary") {
+    } else if (["gltf", "glb"].includes(model)) {
       setFileType("Model");
     } else if (fileType.startsWith("video/")) {
       setFileType("Video");
@@ -178,8 +179,10 @@ const CreateArtistry = ({ categories }: CreateArtistryProps) => {
     const { title, image, art, categoryId, description, url, properties } =
       values;
 
+      debugger;
+
     // Ensure the file exists and is a File instance
-    if (values.image && values.image instanceof File) {
+    if (values.image && values.image instanceof File && values.art && values.art instanceof File) {
       try {
         const [res1] = await uploadFiles({
           files: [values.image],
@@ -197,6 +200,7 @@ const CreateArtistry = ({ categories }: CreateArtistryProps) => {
         };
 
         console.log("args: ", args);
+        debugger;
 
         const web3StorageResponse = await storeJSONToWeb3Storage(
           args,
@@ -256,18 +260,19 @@ const CreateArtistry = ({ categories }: CreateArtistryProps) => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="w-full mt-10 flex flex-col gap-10"
         >
-          <div className="flex gap-10">
-            <div className="font-medium flex flex-col gap-8 w-2/3">
+          <div className="flex gap-8">
+            <div className="font-medium flex flex-col justify-evenly gap-10 w-2/3">
               <div className="flex gap-4 w-full">
                 <FormField
                   control={form.control}
                   name="title"
                   render={({ field }) => (
-                    <FormItem className="w-1/2">
+                    <FormItem className="w-2/3 flex flex-col gap-4">
                       <FormLabel>Display name</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Give a name for your art"
+                          className="h-[50px]"
                           {...field}
                         />
                       </FormControl>
@@ -281,10 +286,14 @@ const CreateArtistry = ({ categories }: CreateArtistryProps) => {
                   control={form.control}
                   name="categoryId"
                   render={({ field }) => (
-                    <FormItem className="w-1/2">
+                    <FormItem className="w-1/3 flex flex-col gap-4">
                       <FormLabel>Art Category</FormLabel>
                       <FormControl>
-                        <Combobox options={categorieOptions} {...field} />
+                        <Combobox
+                          options={categorieOptions}
+                          className="h-[50px]"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -292,21 +301,7 @@ const CreateArtistry = ({ categories }: CreateArtistryProps) => {
                 />
               </div>
 
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="font-medium">Description</FormLabel>
-                    <FormControl>
-                      <Editor {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-<div className="flex gap-4">
+              <div className="flex gap-4">
                 <FormField
                   control={form.control}
                   name="art"
@@ -321,7 +316,7 @@ const CreateArtistry = ({ categories }: CreateArtistryProps) => {
                       <FormControl>
                         <Input
                           type="file"
-                          accept="image/*,.glb,video/*,audio/*"
+                          accept="image/*, .glb, .gltf-binary, video/*, audio/*"
                           multiple={false}
                           className="max-w-[50%] font-bold text-[#d0a17a] text-sm"
                           {...{ ...field, value: undefined }}
@@ -370,9 +365,26 @@ const CreateArtistry = ({ categories }: CreateArtistryProps) => {
 
               <FormField
                 control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-4">
+                    <FormLabel className="font-medium">Description</FormLabel>
+                    <FormControl>
+                      <Editor {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+
+<div></div>
+
+              <FormField
+                control={form.control}
                 name="url"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="flex flex-col gap-4">
                     <FormLabel className="font-medium">External URL</FormLabel>
                     <FormControl>
                       <Input
@@ -385,6 +397,7 @@ const CreateArtistry = ({ categories }: CreateArtistryProps) => {
                   </FormItem>
                 )}
               />
+
               <div className="">
                 <div className="flex items-center justify-between text-xl leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium">
                   Art properties
@@ -476,7 +489,7 @@ const CreateArtistry = ({ categories }: CreateArtistryProps) => {
                       <Button
                         onClick={() => remove(index)}
                         disabled={index === 0}
-                        variant='ghost'
+                        variant="ghost"
                         className="hover:bg-muted-foreground/20 items-center text-white/30 hover:text-red-500"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -486,10 +499,18 @@ const CreateArtistry = ({ categories }: CreateArtistryProps) => {
                 ))}
               </div>
             </div>
-            <div className="font-medium flex flex-col justify-end gap-8 w-1/3 relative">
+            <div className="font-medium flex flex-col gap-8 w-1/3 relative">
               {/* Image Preview */}
-              <FilePreview file={form.watch("art")} fileType={fileType} />
-              <div className="relative group hover:shadow-sm w-[500px] h-[350px] mx-auto rounded-lg bg-card cursor-pointer hover:bg-card">
+              <FilePreview
+                file={form.watch("art")}
+                fileType={fileType}
+                className={`self-end ${
+                  !fileType ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+                disabled={fileType === "Unknown"}
+              />
+
+              <div className="relative group hover:shadow-sm w-[500px] h-[340px] rounded-lg bg-card cursor-pointer hover:bg-card self-end">
                 <div className="relative h-full">
                   {form.watch("image") ? (
                     <Image
@@ -500,13 +521,11 @@ const CreateArtistry = ({ categories }: CreateArtistryProps) => {
                       objectFit="cover"
                     />
                   ) : (
-                    <div className="w-full h-full object-cover rounded-lg flex justify-center items-center bg-gray-200 dark:bg-[#202020]">
-                      <span className="text-3xl font-black text-card tracking-widest">
-                        select a cover image
-                      </span>
+                    <div className="flex justify-center items-center bg-card w-[100%] h-[100%] rounded-lg text-center p-5 font-semibold text-xl text-primary/30">
+                      Select a Cover Image
                     </div>
                   )}
-                  <div className="absolute rounded-b-text-white/30lg inset-0 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end">
+                  <div className="absolute rounded-b-lg inset-0 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end">
                     <p className="text-muted dark:text-muted-foreground mb-2 text-xl p-5">
                       {form.watch("title")
                         ? form.watch("title")

@@ -1,11 +1,13 @@
-export default function Home() {
-    return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-24">
-            <div>
-                <h1 className="text-6xl font-bold text-center">
-                    Flix Immersive NFT
-                </h1>
-            </div>
-        </main>
-    );
-}
+"use client";
+
+import React, { useEffect, useState } from "react";
+
+const CreateCampaign = () => {
+  return (
+    <div className="p-6">
+     
+    </div>
+  );
+};
+
+export default CreateCampaign;

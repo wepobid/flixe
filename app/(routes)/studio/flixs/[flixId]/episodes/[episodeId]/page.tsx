@@ -82,8 +82,7 @@ const EpisodeIdPage = async ({
           </Link>
           <div className="font-medium flex flex-col gap-4">
             <h1 className="text-3xl font-bold tracking-wider">
-              Episode Creation
-              {/* <span className="font-black text-[#8b7ad0]">{flix.title}</span> */}
+              <span className="font-black text-[#8b7ad0]">Episode </span>{" "}Creation
             </h1>
           </div>
         </div>

@@ -59,21 +59,39 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4 justify-between">
-        <Input
-          placeholder="Filter flixs..."
-          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-        <Button className="font-bold" onClick={() => setModal(true)}>
-          <PlusCircle className="h-4 w-4 mr-2 font-bold" />
-          New Flix
-        </Button>
+      <div className="flex items-center justify-between bg-card border rounded-md px-4 py-2 mb-8">
+        <div className="flex-1">
+          <h1 className="text-3xl font-bold tracking-wider">
+            <span className="font-black text-[#8b7ad0]">Flix</span> List
+          </h1>
+        </div>
+
+        <div className="flex-1 flex justify-center">
+          <Input
+            placeholder="Search your flixs"
+            value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("title")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm max-h-small mx-auto text-center"
+          />
+        </div>
+
+        <div className="flex-1 flex justify-end">
+          <Button
+            type="submit"
+            variant="outline"
+            size="sm"
+            onClick={() => setModal(true)}
+          >
+            <PlusCircle className="h-4 w-4 mr-2 font-bold" />
+            Create
+          </Button>
+        </div>
+
         <CreatePage modal={modal} setModal={setModal} />
       </div>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>

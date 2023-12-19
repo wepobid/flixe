@@ -53,13 +53,17 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex-grow overflow-hidden">
+        <div className="flex-grow overflow-hidden mt-6">
           <TabsContent value="video" className="border-none p-0">
-            <div className="border rounded-md p-4 mt-6 font-medium flex flex-col gap-8">
-              <h1 className="text-3xl font-bold tracking-wider">
-                Setup{" "}
-                <span className="font-black text-[#8b7ad0]">Video Adware</span>
-              </h1>
+            <div className="flex items-center justify-between bg-card border rounded-md px-4 pb-2">
+              <div className="flex-1">
+                <h1 className="text-3xl font-bold tracking-wider">
+                  Setup{" "}
+                  <span className="font-black text-[#8b7ad0]">
+                    Video Adware
+                  </span>
+                </h1>
+              </div>
             </div>
             <VideoAd />
           </TabsContent>
@@ -67,13 +71,15 @@ export default function Home() {
             value="billboard"
             className="flex flex-col h-full border-none p-0"
           >
-            <div className="border rounded-md p-4 mt-4 font-medium flex flex-col gap-8">
-              <h1 className="text-3xl font-bold tracking-wider">
-                Setup{" "}
-                <span className="font-black text-[#8b7ad0]">
-                  BillBoard Adware
-                </span>
-              </h1>
+            <div className="flex items-center justify-between bg-card border rounded-md px-4 pb-2">
+              <div className="flex-1">
+                <h1 className="text-3xl font-bold tracking-wider">
+                  Setup{" "}
+                  <span className="font-black text-[#8b7ad0]">
+                    BillBoard Adware
+                  </span>
+                </h1>
+              </div>
             </div>
             <BillboardAd />
           </TabsContent>

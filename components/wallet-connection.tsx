@@ -34,6 +34,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Underline } from "@/app/(routes)/(flixe)/(home)/components/underline";
 
 export function WalletConnection({ home = false }: { home?: boolean }) {
   useWallet();
@@ -108,7 +109,11 @@ export function WalletConnection({ home = false }: { home?: boolean }) {
             disabled={isLoggingIn}
           >
             <WalletIcon className="mr-2 h-5 w-5" />
-            {isLoggingIn ? <Loader2 className="w-6 h-6 text-primary animate-spin"/> : "Screen In"}
+            {isLoggingIn ? (
+              <Loader2 className="w-6 h-6 text-primary animate-spin" />
+            ) : (
+              "Screen In"
+            )}
             <span className="sr-only">Wallet Connection</span>
           </Button>
           {walletAddress && (
@@ -214,9 +219,20 @@ export function WalletConnection({ home = false }: { home?: boolean }) {
       )}
     </>
   ) : (
-    <Button variant="ghost" onClick={handleScreenInClick} disabled={isLoggingIn}>
+    <Button
+      variant="ghost"
+      onClick={handleScreenInClick}
+      disabled={isLoggingIn}
+    >
       <span className="metamask-gradient text-2xl font-black px-1">
-        {isLoggingIn ? <Loader2 className="w-6 h-6 text-primary animate-spin"/> : "Metamask"}
+        {isLoggingIn ? (
+          <Loader2 className="w-6 h-6 text-primary animate-spin" />
+        ) : (
+          <span className='w-full'>
+            Metamask
+            <Underline />
+          </span>
+        )}
       </span>
     </Button>
   );

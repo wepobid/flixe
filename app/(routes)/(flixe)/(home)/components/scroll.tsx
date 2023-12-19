@@ -21,7 +21,7 @@ export const ScrollCore = () => {
         }}
       >
         <Header translate={translate} />
-        <Card rotate={rotate} translate={translate} scale={scale} />
+        {/* <Card rotate={rotate} translate={translate} scale={scale} /> */}
       </div>
     </div>
   );

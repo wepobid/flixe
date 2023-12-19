@@ -106,10 +106,10 @@ export const BackgroundSVG = () => {
                 delay: Math.random() * 10,
               }}
             >
-              <stop stopColor="#18CCFC" stopOpacity="0" />
-              <stop stopColor="#18CCFC" />
-              <stop offset="32.5%" stopColor="#6344F5" />
-              <stop offset="100%" stopColor="#AE48FF" stopOpacity="0" />
+              <stop stopColor="#89cff0" stopOpacity="0" />
+              <stop stopColor="#a0e4e0" />
+              <stop offset="32.5%" stopColor="#c7f5c0" />
+              <stop offset="100%" stopColor="#e4f9a0" stopOpacity="0" />
             </motion.linearGradient>
           ))}
 
@@ -121,10 +121,10 @@ export const BackgroundSVG = () => {
             gradientUnits="userSpaceOnUse"
             gradientTransform="translate(352 34) rotate(90) scale(555 1560.62)"
           >
-              <stop stopColor="#18CCFC" stopOpacity="0" />
-              <stop stopColor="#18CCFC" />
-              <stop offset="32.5%" stopColor="#6344F5" />
-              <stop offset="100%" stopColor="#AE48FF" stopOpacity="0" />
+              <stop stopColor="#89cff0" stopOpacity="0" />
+              <stop stopColor="#a0e4e0" />
+              <stop offset="32.5%" stopColor="#c7f5c0" />
+              <stop offset="100%" stopColor="#e4f9a0" stopOpacity="0" />
           </radialGradient>
         </defs>
       </svg>

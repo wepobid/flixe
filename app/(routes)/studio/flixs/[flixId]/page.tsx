@@ -106,7 +106,7 @@ const FlixIdPage = async ({ params }: { params: { flixId: string } }) => {
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-border/90 rounded-md">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-2 border-border/90 rounded-md">
           <div>
             <div className="flex items-center gap-x-2">
               <h2 className="text-xl font-bold">Flix Details</h2>

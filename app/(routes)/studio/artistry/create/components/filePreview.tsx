@@ -12,15 +12,23 @@ import {
 } from "@/components/ui/alert-dialog";
 import ThreeDModel from "./ThreeDModel";
 import { Button } from "@/components/ui/button";
-import { Expand } from "lucide-react";
-import { Preview } from '@/components/preview';
+import { Expand, XCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
+import ThreeDModelViewer from './ModelViewer';
 
 type FilePreviewProps = {
   file: File;
   fileType: "Image" | "Model" | "Video" | "Music" | "Unknown";
+  className?: string;
+  disabled?: boolean;
 };
 
-const FilePreview: React.FC<FilePreviewProps> = ({ file, fileType }) => {
+const FilePreview: React.FC<FilePreviewProps> = ({
+  file,
+  fileType,
+  className,
+  disabled = true,
+}) => {
   const [previewSrc, setPreviewSrc] = useState<string | null>(null);
   const previewSize = { width: 500, height: 500 }; // fixed size for 1:1 aspect ratio
 
@@ -77,7 +85,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({ file, fileType }) => {
         );
       default:
         return (
-          <div className="flex justify-center items-center bg-card w-[100%] h-[100%] rounded-lg text-center p-5">
+          <div className="flex justify-center items-center bg-card w-[100%] h-[100%] rounded-lg text-center p-5 font-semibold text-xl text-primary/30">
             Select any Image, 3D Model, Video or Music Art
           </div>
         );
@@ -135,24 +143,28 @@ const FilePreview: React.FC<FilePreviewProps> = ({ file, fileType }) => {
   return (
     <div
       style={{ position: "relative", ...previewSize }}
-      className="border border-border m-auto w-full rounded-lg overflow-hidden"
+      className={cn(
+        "border border-border w-full rounded-lg overflow-hidden",
+        className
+      )}
     >
       {renderPreview()}
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button className="absolute top-0 right-0 z-10 m-4 rounded-full bg-foreground/10 hover:bg-muted-foreground/20 p-3 backdrop-filter backdrop-blur-md text-priamry">
+          <Button
+            className="absolute top-0 right-0 z-10 m-4 rounded-full bg-foreground/10 hover:bg-muted-foreground/20 p-3 backdrop-filter backdrop-blur-md text-priamry"
+            disabled={disabled}
+          >
             <Expand className="h-4 w-4" />
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent className="w-[80%] h-[80%] flex flex-col justify-center items-center">
-          <AlertDialogHeader><h1>Art Preview</h1></AlertDialogHeader>
           <AlertDialogDescription>
+            <AlertDialogCancel className="absolute top-2 right-2 z-10 rounded-full bg-foreground/10 hover:bg-muted-foreground/20 p-3 backdrop-filter backdrop-blur-md text-priamry">
+              <XCircle className="h-4 w-4" />
+            </AlertDialogCancel>
             {renderPopoverContent()}
           </AlertDialogDescription>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>Continue</AlertDialogAction>
-          </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </div>

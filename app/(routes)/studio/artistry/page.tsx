@@ -26,14 +26,22 @@ const CreateCampaign = () => {
   return (
     <div className="p-6">
       {/* {isLoading && <Loader />} */}
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col gap-y-2">
-          <h1 className="text-3xl font-bold tracking-wider">Artistry List</h1>
-          {/* <span className="text-sm text-primary">Complete all fields</span> */}
+      <div className="flex items-center justify-between bg-card border rounded-md px-4 py-2">
+        <div className="flex items-center flex-row justify-center align-middle">
+          <div className="font-medium flex flex-col gap-4">
+            <h1 className="text-3xl font-bold tracking-wider">
+              <span className="font-black text-[#8b7ad0]">Artistry</span>{" "}List
+            </h1>
+          </div>
         </div>
-        <div className="flex items-center gap-x-8">
-          <Button onClick={handleClick}>Create</Button>
-        </div>
+        <Button
+          type="submit"
+          variant="outline"
+          size="sm"
+          onClick={handleClick}
+        >
+          Create
+        </Button>
       </div>
     </div>
   );
