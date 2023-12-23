@@ -2,13 +2,15 @@ import { redirect } from "next/navigation";
 
 import authOptions from "@/app/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
-import { ScrollCore } from "./components/scroll";
 import Image from "next/image";
 import { WalletConnection } from "@/components/wallet-connection";
-import { BackgroundSVG } from './components/backgroundBeam';
-import { MeteorPreview } from './components/meteorPreview';
-import { Meteors } from './components/meteors';
-import { Lamp } from './components/SVGMaskEffect';
+// import { ScrollCore } from "./components/scroll";
+// import { BackgroundSVG } from './components/backgroundBeam';
+// import { MeteorPreview } from './components/meteorPreview';
+// import { Lamp } from './components/SVGMaskEffect';
+import { Meteors } from "./components/meteors";
+import NightSky from "./components/nightSky";
+import Stars from "./components/stars";
 
 interface Session {
   user?: {
@@ -21,9 +23,9 @@ export default async function Home() {
 
   if (!session?.user?.email) {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-between p-16">
-        <div className="flex flex-col gap-4 justify-center z-10">
-          <h1 className="text-5xl md:text-6xl lg:text-9xl font-bold text-center leading-tight tracking-tighter my-4">
+      <main className="flex flex-col items-center justify-between h-[100vh] -mt-[4.5rem] ">
+        <div className="flex flex-col items-center justify-center gap-4 z-10 h-full">
+          <h1 className="text-5xl md:text-6xl lg:text-9xl font-bold text-center leading-tight tracking-tighter mb-4">
             Step into{" "}
             <span className="flixe-gradient text-5xl md:text-6xl lg:text-9xl font-black px-1">
               Flixe
@@ -44,13 +46,14 @@ export default async function Home() {
             Unlock the magic with <WalletConnection home={true} /> to explore
             further!
           </div>
-          <ScrollCore />
+          {/* <ScrollCore /> */}
         </div>
-        <BackgroundSVG />
-        {/* <Meteors number={10} /> */}
+        <NightSky />
+        <Stars />
+        {/* <BackgroundSVG /> */}
+        <Meteors number={1} />
         {/* <MeteorPreview /> */}
         {/* <Lamp /> */}
-        
       </main>
     );
   } else {

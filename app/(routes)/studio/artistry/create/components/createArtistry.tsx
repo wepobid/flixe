@@ -190,7 +190,7 @@ const CreateArtistry = ({ categories }: CreateArtistryProps) => {
         });
         const [res2] = await uploadFiles({
           files: [values.art],
-          endpoint: "imageUploader",
+          endpoint: "glbModelUploader",
         });
 
         const args = {

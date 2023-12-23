@@ -14,7 +14,6 @@ import ThreeDModel from "./ThreeDModel";
 import { Button } from "@/components/ui/button";
 import { Expand, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import ThreeDModelViewer from './ModelViewer';
 
 type FilePreviewProps = {
   file: File;

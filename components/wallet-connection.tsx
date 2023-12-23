@@ -223,6 +223,7 @@ export function WalletConnection({ home = false }: { home?: boolean }) {
       variant="ghost"
       onClick={handleScreenInClick}
       disabled={isLoggingIn}
+      className='hover:bg-transparent'
     >
       <span className="metamask-gradient text-2xl font-black px-1">
         {isLoggingIn ? (

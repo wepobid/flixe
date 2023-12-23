@@ -19,7 +19,7 @@ module.exports = {
     extend: {
       display: ['group-hover'],
       fontFamily: {
-        'exo': ['Exo 2', 'sans-serif'],
+        'exo': ['Space Mono', 'sans-serif'],
         'concert': ['Concert One', 'cursive']
       },
       colors: {
