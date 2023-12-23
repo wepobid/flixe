@@ -25,12 +25,14 @@ export default async function Home() {
     return (
       <main className="flex flex-col items-center justify-between h-[100vh] -mt-[4.5rem] ">
         <div className="flex flex-col items-center justify-center gap-4 z-10 h-full">
-          <h1 className="text-5xl md:text-6xl lg:text-9xl font-bold text-center leading-tight tracking-tighter mb-4">
-            Step into{" "}
-            <span className="flixe-gradient text-5xl md:text-6xl lg:text-9xl font-black px-1">
+          <h1 className="text-9xl font-black text-center leading-tight tracking-tighter mb-4">
+            Step<span className="text-8xl"> </span>into
+            <span className="text-8xl"> </span>
+            <span className="flixe-gradient text-9xl font-black px-1">
               Flixe
-            </span>{" "}
-            <span className="font-extrabold inline-block align-middle">
+            </span>
+            <span className="text-8xl"> </span>
+            {/* <span className="font-extrabold inline-block align-middle">
               <Image
                 src="/logo.png"
                 alt="Flixe logo"
@@ -38,7 +40,8 @@ export default async function Home() {
                 height={110}
                 className="pb-6"
               />
-            </span>{" "}
+            </span> */}
+            <span className="text-8xl"> </span>
             Universe
           </h1>
 
